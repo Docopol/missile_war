@@ -127,5 +127,5 @@ dmypy.json
 
 # jupyter notebooks
 
-WingboxSimulation/*.ipynb
-!graphs.ipynb
+.ipynb
+
