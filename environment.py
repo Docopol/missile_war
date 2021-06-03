@@ -1,5 +1,7 @@
 import numpy as np
+import pygame as pg
 import matplotlib.pyplot as plt
+
 
 class Environment:
     gravitationParameter = 1
@@ -16,10 +18,22 @@ class Environment:
         self.Gx, self.Gy = np.zeros(size).T, np.zeros(size).T
         
         self.planets = []
+        self.imageNumb = 0
 
     def addPlanet(self, mass, position):
         self.planets.append((mass, position))
-        
+
+    def showPlanet(self, planetNumb, screen):
+        dt = 0.001
+        self.imageNumb += dt * 100
+        numberOfImages = 399
+        if self.imageNumb > numberOfImages:
+            self.imageNumb = 0
+        n = str(round(self.imageNumb))
+        filename = "Images/planet1/planet"+ str(planetNumb) + "-"+ str(n) + ".png"
+        planetImage = pg.image.load(filename)
+        screen.blit(planetImage, self.planets[planetNumb-1][1])
+        pass
     def calcTotalGravityField(self):
         for planet in self.planets:
             gx, gy = self.gravityField(*planet, x=self.X, y=self.Y)

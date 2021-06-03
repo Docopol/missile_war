@@ -3,6 +3,7 @@ import pygame.time
 import pygame as pg
 
 from Usefullfunctions import *
+from environment import *
 import Planets
 
 pg.init()  # initialise pygame
@@ -10,8 +11,6 @@ resolution = (1280, 720)
 screen = pg.display.set_mode(resolution)
 
 # setting background
-background = pg.image.load("Images/background.jpg")
-background = pg.transform.scale(background, resolution)
 pg.display.set_caption("Missile war")
 
 # loading images
@@ -47,7 +46,7 @@ def main_menu():
 
         if button_1.collidepoint((mouseX, mouseY)):
             if click:
-                game()
+                level(1)
         if button_2.collidepoint((mouseX, mouseY)):
             if click:
                 options_menu()
@@ -75,8 +74,19 @@ def main_menu():
 
 
 def game():
+    pass
+
+def level(levelNb):
     GameStartTime = pygame.time.get_ticks() / 1000.
     running = True
+
+    background = pg.image.load("Images/background.jpg")
+    background = pg.transform.scale(background, resolution)
+
+    Space = Environment(resolution)
+    Space.addPlanet(100, (400, 200))
+    imageNumb = 0
+
     while running:
 
         gameTime = pygame.time.get_ticks() / 1000.
@@ -91,27 +101,27 @@ def game():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     running = False
-            if event.type == pg.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
 
         mouseX, mouseY = pygame.mouse.get_pos()
         if backbutton.collidepoint((mouseX, mouseY)):
             if click:
                 running = False
 
+
         screen.blit(background, (0, 0))
         screen.blit(backbuttonImage, backbutton)
 
-        planet1Position = (400, 200)
-        screen.blit(Planets.Planets.planetVisual(self=0, planetNumb=1), (planet1Position))
-        screen.blit(target, (planet1Position[0] + 120, planet1Position[1] + 50))
+        
+        # screen.blit(Planets.Planets.planetVisual(self=0, planetNumb=1), (planet1Position))
+        Space.showPlanet(1, screen)
+        screen.blit(target, ( 520,  250))
         scCoords = (40,350)
         screen.blit(spaceshipImage,(scCoords))
         # screen.blit(Planets.Planets.planet2Visual(self=0), (200, 200))
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
+
 
 
 def options_menu():
