@@ -1,7 +1,8 @@
 import sys
-
 import pygame.time
 import pygame as pg
+
+from Usefullfunctions import *
 import Planets
 
 pg.init()  # initialise pygame
@@ -29,7 +30,7 @@ Click = False
 def main_menu():
     while True:
         gameTime = pygame.time.get_ticks() / 1000.
-        screen.blit(mainMenuBackground,(0,0))
+        screen.blit(mainMenuBackground, (0, 0))
 
         mouseX, mouseY = pygame.mouse.get_pos()
 
@@ -61,17 +62,15 @@ def main_menu():
                 if event.button == 1:
                     click = True
 
-        Text = str(gameTime)
-        timeText = font.render(Text, True, (0, 0, 200))
-        screen.blit(timeText, (1400, 20))
+        screen.blit(text_func(gameTime, 32, (0, 0, 255)),
+                    (0.9 * resolution[0], 0.05 * resolution[1]))  # displaying runtime
+
+        screen.blit(text_func(fps_count(gameTime), 32, (0, 0, 255)),
+                    (0.9 * resolution[0], 0.1 * resolution[1]))
 
         pg.display.flip()
 
-        # calculating number of fps
-        endLoopTime = pygame.time.get_ticks() / 1000.
-        looptime = endLoopTime - gameTime
-        # print(looptime)
-        print("fps:", 1 / (looptime+0.000001))
+        # calculating number of fpsx
 
 
 def game():
@@ -106,7 +105,7 @@ def game():
         endLoopTime = pygame.time.get_ticks() / 1000.
         looptime = endLoopTime - gameTime
         # print(looptime)
-        print("fps:", 1 / (looptime+0.000001))
+        print("fps:", 1 / (looptime + 0.000001))
 
 
 def options_menu():
@@ -139,7 +138,7 @@ def options_menu():
         endLoopTime = pygame.time.get_ticks() / 1000.
         looptime = endLoopTime - gameTime
         # print(looptime)
-        print("fps:", 1 / (looptime+0.000001))
+        print("fps:", 1 / (looptime + 0.000001))
 
 
 main_menu()
