@@ -20,9 +20,19 @@ button2Image = pg.image.load("Images/Buttons/button_options.png")
 button3Image = pg.image.load("Images/Buttons/button_quit.png")
 mainMenuBackground = pg.image.load("Images/menuBackground.jpg")
 mainMenuBackground = pg.transform.scale(mainMenuBackground, resolution)
+target = pg.image.load("Images/target.png")
+target = pg.transform.scale(target, (int(0.05 * resolution[0]), int(0.035 * resolution[0])))
+mainMenuText = pg.image.load("Images/Missile War.png")
+backbuttonImage = pg.image.load("Images/Buttons/button_back.png")
+backbuttonImage = pg.transform.scale(backbuttonImage,(50,50))
+spaceshipImage = pg.image.load("Images/spaceship.png")
+spaceshipImage = pg.transform.scale(spaceshipImage,(96,54))
 
-# basic font
-font = pygame.font.SysFont(None, 32)
+# buttons
+button_1 = pg.Rect(int(0.22 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
+button_2 = pg.Rect(int(0.42 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
+button_3 = pg.Rect(int(0.62 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
+backbutton = pg.Rect(int(0.95 * resolution[0]), int(0.02 * resolution[0]), 50, 50)
 
 Click = False
 
@@ -31,12 +41,9 @@ def main_menu():
     while True:
         gameTime = pygame.time.get_ticks() / 1000.
         screen.blit(mainMenuBackground, (0, 0))
+        screen.blit(mainMenuText, (200, 100))
 
         mouseX, mouseY = pygame.mouse.get_pos()
-
-        button_1 = pg.Rect(int(0.22 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
-        button_2 = pg.Rect(int(0.42 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
-        button_3 = pg.Rect(int(0.62 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
 
         if button_1.collidepoint((mouseX, mouseY)):
             if click:
@@ -62,15 +69,9 @@ def main_menu():
                 if event.button == 1:
                     click = True
 
-        screen.blit(text_func(gameTime, 32, (0, 0, 255)),
-                    (0.9 * resolution[0], 0.05 * resolution[1]))  # displaying runtime
-
-        screen.blit(text_func(fps_count(gameTime), 32, (0, 0, 255)),
-                    (0.9 * resolution[0], 0.1 * resolution[1]))
+        housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
 
         pg.display.flip()
-
-        # calculating number of fpsx
 
 
 def game():
@@ -79,7 +80,7 @@ def game():
     while running:
 
         gameTime = pygame.time.get_ticks() / 1000.
-
+        click = False
         for event in pygame.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
@@ -90,29 +91,34 @@ def game():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     running = False
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        mouseX, mouseY = pygame.mouse.get_pos()
+        if backbutton.collidepoint((mouseX, mouseY)):
+            if click:
+                running = False
 
         screen.blit(background, (0, 0))
-        screen.blit(Planets.Planets.planet1Visual(self=0), (400, 400))
-        screen.blit(Planets.Planets.planet2Visual(self=0), (200, 200))
+        screen.blit(backbuttonImage, backbutton)
 
-        Text = str(gameTime)
-        timeText = font.render(Text, True, (0, 0, 200))
-        screen.blit(timeText, (1400, 20))
+        planet1Position = (400, 200)
+        screen.blit(Planets.Planets.planetVisual(self=0, planetNumb=1), (planet1Position))
+        screen.blit(target, (planet1Position[0] + 120, planet1Position[1] + 50))
+        scCoords = (40,350)
+        screen.blit(spaceshipImage,(scCoords))
+        # screen.blit(Planets.Planets.planet2Visual(self=0), (200, 200))
 
+        housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
-
-        # calculating number of fps
-        endLoopTime = pygame.time.get_ticks() / 1000.
-        looptime = endLoopTime - gameTime
-        # print(looptime)
-        print("fps:", 1 / (looptime + 0.000001))
 
 
 def options_menu():
     GameStartTime = pygame.time.get_ticks() / 1000.
     running = True
     while running:
-
+        click = False
         gameTime = pygame.time.get_ticks() / 1000.
 
         for event in pygame.event.get():
@@ -125,20 +131,20 @@ def options_menu():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     running = False
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
 
-        screen.fill((3, 200, 70))
+        mouseX, mouseY = pygame.mouse.get_pos()
+        if backbutton.collidepoint((mouseX, mouseY)):
+            if click:
+                running = False
 
-        Text = str(gameTime)
-        timeText = font.render(Text, True, (0, 0, 200))
-        screen.blit(timeText, (1400, 20))
+        screen.blit(mainMenuBackground, (0, 0))
+        screen.blit(backbuttonImage, backbutton)
 
+        housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
-
-        # calculating number of fps
-        endLoopTime = pygame.time.get_ticks() / 1000.
-        looptime = endLoopTime - gameTime
-        # print(looptime)
-        print("fps:", 1 / (looptime + 0.000001))
 
 
 main_menu()
