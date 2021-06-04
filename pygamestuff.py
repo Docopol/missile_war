@@ -4,7 +4,6 @@ import pygame as pg
 
 from Usefullfunctions import *
 from environment import *
-import Planets
 
 pg.init()  # initialise pygame
 resolution = (1280, 720)
