@@ -130,7 +130,13 @@ def level(levelNb):
 
 
 def options_menu():
-    GameStartTime = pygame.time.get_ticks() / 1000.
+    #button stuff
+    buttonVolumeUp = pg.Rect(int(0.22 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
+    buttonVolumeDown = pg.Rect(int(0.28 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
+    buttonLeftImage = pg.image.load("Images/Buttons/button_right.png")
+    buttonLeftImage = pg.transform.scale(buttonLeftImage,(100,50))
+    buttonRightImage = pg.transform.flip(buttonLeftImage, True, False)
+
     running = True
     while running:
         click = False
@@ -154,9 +160,18 @@ def options_menu():
         if backbutton.collidepoint((mouseX, mouseY)):
             if click:
                 running = False
+        if buttonVolumeUp.collidepoint((mouseX,mouseY)):
+            if click:
+                pass
+        if buttonVolumeDown.collidepoint((mouseX,mouseY)):
+            if click:
+                pass
+
 
         screen.blit(mainMenuBackground, (0, 0))
         screen.blit(backbuttonImage, backbutton)
+        screen.blit(buttonLeftImage,buttonVolumeDown)
+        screen.blit(buttonRightImage,buttonVolumeUp)
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
