@@ -10,6 +10,11 @@ pg.init()  # initialise pygame
 resolution = (1280, 720)
 screen = pg.display.set_mode(resolution)
 
+#background music
+pg.mixer.init()
+pygame.mixer.music.load("Star Wars Main Theme (Full).mp3")
+pygame.mixer.music.play(-1,0.0)
+
 # setting background
 pg.display.set_caption("Missile war")
 
