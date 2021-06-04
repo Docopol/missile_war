@@ -3,7 +3,8 @@ import pygame.time
 import pygame as pg
 
 from Usefullfunctions import *
-from environment import *
+from environment import Environment
+from missile import Missile
 
 pg.init()  # initialise pygame
 resolution = (1280, 720)
@@ -93,9 +94,14 @@ def level(levelNb):
     background = pg.transform.scale(background, resolution)
 
     Space = Environment(resolution)
-    Space.addPlanet(100, (400, 200))
+    
+    Space.addPlanet(5e5, (400, 200))
+    Space.calcTotalGravityField()
+    scCoords = (40, 350)
+    Projectile = Missile(1, scCoords)
 
     imageNumb = 0
+    fireProjectile = False
 
     while running:
 
@@ -111,6 +117,9 @@ def level(levelNb):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     running = False
+                if event.key == pg.K_SPACE:
+                    Projectile.Launch(60, firingAngle, Space)
+                    fireProjectile = True
 
         mouseX, mouseY = pygame.mouse.get_pos()
         if backbutton.collidepoint((mouseX, mouseY)):
@@ -121,14 +130,20 @@ def level(levelNb):
         screen.blit(backbuttonImage, backbutton)
 
         # screen.blit(Planets.Planets.planetVisual(self=0, planetNumb=1), (planet1Position))
-        Space.showPlanet(1, screen)
+        Space.showPlanet(1, screen, 300)
         screen.blit(target, (520, 250))
-        scCoords = (40, 350)
-        playermove(screen, mouseX, mouseY, (40, 350))
+
+        if(fireProjectile ==  True):
+            Projectile.ReturnPositions(screen)
+
+        firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
         # screen.blit(Planets.Planets.planet2Visual(self=0), (200, 200))
+
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
+
+
 
 
 def options_menu(volume):

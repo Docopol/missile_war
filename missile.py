@@ -1,4 +1,5 @@
 import numpy as np 
+import pygame as pg
 
 class Missile:
 	dt = 0.01
@@ -15,30 +16,32 @@ class Missile:
 		xSpeed = [speed*np.cos(np.radians(angle)), ]
 		ySpeed = [speed*np.sin(np.radians(angle)), ]
 
-		time = np.arange(0, 10, self.dt)
+		time = np.arange(0, self.maxTime, self.dt)
 
 
 		for index, value in enumerate(time):
 
-			if((round(xPos[index])>= 1080) or (round(xPos[index]) <= 0) or (round(yPos[index]) >= 720) or (round(yPos[index]) <= 0)):
+			if((round(xPos[index])>= 1280) or (round(xPos[index]) <= 0) or (round(yPos[index]) >= 720) or (round(yPos[index]) <= -50)):
 				break
 
 			newX = xPos[index] + xSpeed[index]*self.dt + environment.Gx[round(yPos[index]), round(xPos[index])]*self.dt**2/2 
 			newY = yPos[index] + ySpeed[index]*self.dt + environment.Gy[round(yPos[index]), round(xPos[index])]*self.dt**2/2
 			newXSpeed = xSpeed[index]+environment.Gx[round(yPos[index]), round(xPos[index])]*self.dt
 			newYSpeed = ySpeed[index]+environment.Gy[round(yPos[index]), round(xPos[index])]*self.dt
-			print(newX, newY)
 			
 			xPos.append(newX)
 			yPos.append(newY)
 			xSpeed.append(newXSpeed) 
 			ySpeed.append(newYSpeed)
 
-		return xPos, yPos
+		self.xFinal = xPos
+		self.yFinal = yPos
 
 	def ReturnPositions(self, screen):
-
-		filename = "Images/Missile0/missile.png"
+		filename = "Images/Missile/projectile0.png"
 		missileImage = pg.image.load(filename)
-		screen.blit(missileImage, (self.xPos[timeStep], self.yPos[timeStep]))
-		timeStep += 1
+
+		if(self.timeStep < len(self.xFinal)):
+			screen.blit(missileImage, (self.xFinal[self.timeStep], self.yFinal[self.timeStep]))
+
+		self.timeStep += 3
