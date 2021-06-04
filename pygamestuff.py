@@ -11,7 +11,7 @@ screen = pg.display.set_mode(resolution)
 
 #background music
 pg.mixer.init()
-pygame.mixer.music.load("Star Wars Main Theme (Full).mp3")
+pygame.mixer.music.load("Star-Wars-Main-Theme-_Full_.ogg")
 pygame.mixer.music.play(-1,0.0)
 
 # setting background
