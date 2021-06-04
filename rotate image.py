@@ -6,7 +6,7 @@ import numpy
 sc0 = pygame.image.load("Images/spaceship.png")
 
 
-angles = np.arange(-50,51,4)
+angles = np.arange(-50,51,1)
 
 
 for i in angles:

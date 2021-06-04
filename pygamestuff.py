@@ -50,7 +50,7 @@ def main_menu():
 
         if button_1.collidepoint((mouseX, mouseY)):
             if click:
-                level(1)
+                game()
         if button_2.collidepoint((mouseX, mouseY)):
             if click:
                 options_menu()
@@ -78,7 +78,7 @@ def main_menu():
 
 
 def game():
-    pass
+    level(1)
 
 def level(levelNb):
     GameStartTime = pygame.time.get_ticks() / 1000.
@@ -89,6 +89,7 @@ def level(levelNb):
 
     Space = Environment(resolution)
     Space.addPlanet(100, (400, 200))
+
     imageNumb = 0
 
     while running:
@@ -120,7 +121,7 @@ def level(levelNb):
         Space.showPlanet(1, screen)
         screen.blit(target, ( 520,  250))
         scCoords = (40,350)
-        screen.blit(spaceshipImage,(scCoords))
+        playermove(screen,mouseX,mouseY,(40,350))
         # screen.blit(Planets.Planets.planet2Visual(self=0), (200, 200))
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps

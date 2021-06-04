@@ -1,5 +1,7 @@
 import pygame
+import pygame as pg
 import sys
+import math
 
 
 def text_func(message, size, color):
@@ -20,3 +22,20 @@ def housekeepingdata(gameTime,resolution,screen):
 
     screen.blit(text_func("fps:" + str(fps_count(gameTime)), 32, (0, 0, 255)),  # displaying fps
                 (0.9 * resolution[0], 0.9 * resolution[1]))
+
+
+def playermove(screen, mouseX, mouseY, scCoords):
+    #triginometrie
+    opposite = scCoords[1] +27 - mouseY
+    adjacent = mouseX - scCoords[0] + 48
+    angle = round(math.atan2(opposite,adjacent) / math.pi *180)
+    if angle < - 49:
+        angle = -49
+    if angle > 49:
+        angle = 49
+
+    filename = "Images/spacecraft/sc" + str(angle) +".png"
+    playerimage = pg.image.load(filename)
+    screen.blit(playerimage,(scCoords))
+
+
