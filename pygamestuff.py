@@ -131,8 +131,8 @@ def level(levelNb):
 
 def options_menu():
     #button stuff
-    buttonVolumeUp = pg.Rect(int(0.22 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
-    buttonVolumeDown = pg.Rect(int(0.28 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
+    buttonVolumeUp = pg.Rect(int(0.32 * resolution[0]), int(0.5 * resolution[1]), 200, 50)
+    buttonVolumeDown = pg.Rect(int(0.58 * resolution[0]), int(0.5 * resolution[1]), 200, 50)
     buttonLeftImage = pg.image.load("Images/Buttons/button_right.png")
     buttonLeftImage = pg.transform.scale(buttonLeftImage,(100,50))
     buttonRightImage = pg.transform.flip(buttonLeftImage, True, False)
@@ -170,8 +170,10 @@ def options_menu():
 
         screen.blit(mainMenuBackground, (0, 0))
         screen.blit(backbuttonImage, backbutton)
+
         screen.blit(buttonLeftImage,buttonVolumeDown)
         screen.blit(buttonRightImage,buttonVolumeUp)
+        screen.blit(text_func("Volume",50,(105,220,13)),(570,320))
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
