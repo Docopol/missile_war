@@ -23,13 +23,13 @@ class Missile:
 
 		for index, value in enumerate(time):
 
-			if((round(xPos[index])>= 1280) or (round(xPos[index]) <= -200) or (round(yPos[index]) >= 720) or (round(yPos[index]) <= -200)):
+			if((round(xPos[index])>= 1680) or (round(xPos[index]) <= -500) or (round(yPos[index]) >= 1220) or (round(yPos[index]) <= -500)):
 				break
 
-			newX = xPos[index] + xSpeed[index]*self.dt + environment.Gx[round(yPos[index]), round(xPos[index])]*self.dt**2/2 
-			newY = yPos[index] + ySpeed[index]*self.dt + environment.Gy[round(yPos[index]), round(xPos[index])]*self.dt**2/2
-			newXSpeed = xSpeed[index]+environment.Gx[round(yPos[index]), round(xPos[index])]*self.dt
-			newYSpeed = ySpeed[index]+environment.Gy[round(yPos[index]), round(xPos[index])]*self.dt
+			newX = xPos[index] + xSpeed[index]*self.dt + environment.Gx[round(yPos[index])+500, round(xPos[index])+500]*self.dt**2/2 
+			newY = yPos[index] + ySpeed[index]*self.dt + environment.Gy[round(yPos[index])+500, round(xPos[index])+500]*self.dt**2/2
+			newXSpeed = xSpeed[index]+environment.Gx[round(yPos[index])+500, round(xPos[index])+500]*self.dt
+			newYSpeed = ySpeed[index]+environment.Gy[round(yPos[index])+500, round(xPos[index])+500]*self.dt
 			
 			xPos.append(newX)
 			yPos.append(newY)
@@ -52,7 +52,9 @@ class Missile:
 
 			filename = "Images/Missile/projectile" + str(round(phi)) + ".png"
 			missileImage = pg.image.load(filename)
-			screen.blit(missileImage, (self.xFinal[self.timeStep], self.yFinal[self.timeStep]))
+
+			if(self.xFinal[self.timeStep] <= 1280 or (self.xFinal[self.timeStep] >= -200) or (self.yFinal[self.timeStep] <= 720) or (self.yFinal[self.timeStep] >= -200)):
+				screen.blit(missileImage, (self.xFinal[self.timeStep], self.yFinal[self.timeStep]))
 		else:
 			ready = True
 		self.timeStep += 3

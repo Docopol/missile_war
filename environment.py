@@ -10,12 +10,12 @@ class Environment:
         self.xLength = size[0]
         self.yLength = size[1]
         
-        self.x = np.linspace(0, 1280, size[0])
-        self.y = np.linspace(0, 720, size[1])
+        self.x = np.linspace(-500, 1680, 2180)
+        self.y = np.linspace(-500, 1220, 1720)
         
         self.X, self.Y = np.meshgrid(self.x, self.y)
 
-        self.Gx, self.Gy = np.zeros(size).T, np.zeros(size).T
+        self.Gx, self.Gy = np.zeros((2180, 1720)).T, np.zeros((2180, 1720)).T
         
         self.planets = []
         self.imageNumb = 0
@@ -51,4 +51,6 @@ class Environment:
         color = 2 * np.log(np.hypot(self.Gx, self.Gy))
         ax.streamplot(self.x, self.y, self.Gx, self.Gy, color=color, linewidth=1, cmap=plt.cm.inferno,
               density=1, arrowstyle='->', arrowsize=1.5)
+
+        plt.savefig('test.png')
 
