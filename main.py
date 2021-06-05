@@ -14,7 +14,7 @@ screen = pg.display.set_mode(resolution)
 pg.mouse.set_cursor(pg.cursors.diamond)
 
 # Sounds
-pg.mixer.init(48000,-16,1,10240)
+pg.mixer.init(48000, -16, 1, 10240)
 thing = backGroundMusic = pygame.mixer.music.load("Sounds/Star-Wars-Main-Theme-_Full_.ogg")
 pygame.mixer.music.play(-1, 0.0)
 volume = 0.3
@@ -37,16 +37,17 @@ mainMenuBackground = pg.image.load("Images/menuBackground.jpg")
 mainMenuBackground = pg.transform.scale(mainMenuBackground, resolution)
 target = pg.image.load("Images/target.png")
 target = pg.transform.scale(target, (int(0.05 * resolution[0]), int(0.035 * resolution[0])))
-mainMenuText = pg.image.load("Images/Missile War.png")
+mainMenuText = pg.image.load("Images/Text/Missile War.png")
 backbuttonImage = pg.image.load("Images/Buttons/button_back.png")
 backbuttonImage = pg.transform.scale(backbuttonImage, (50, 50))
 spaceshipImage = pg.image.load("Images/spaceship.png")
 pg.display.set_icon(spaceshipImage)
 spaceshipImage = pg.transform.scale(spaceshipImage, (96, 54))
 lvl1screenshot = pg.image.load("Images/lvlscrshots/scrsht.png")
-Leveltext = pg.image.load("Images/Level.png")
+Leveltext = pg.image.load("Images/Text/Level.png")
 background = pg.image.load("Images/background.jpg")
 background = pg.transform.scale(background, resolution)
+youWinText = pg.image.load("Images/Text/You Win!.png")
 
 # buttons
 button_1 = pg.Rect(int(0.22 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
@@ -55,6 +56,7 @@ button_3 = pg.Rect(int(0.62 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
 backbutton = pg.Rect(int(0.95 * resolution[0]), int(0.02 * resolution[0]), 50, 50)
 
 Click = False
+
 
 
 def main_menu():
@@ -100,20 +102,18 @@ def main_menu():
 
 def levelSelect():
     # button stuff - sorry for being a lazy bitch in this part
-    buttonLevel = np.empty(8,dtype=pg.Rect)
-    ImageLevel = np.empty(8,dtype=pg.Rect)
-    for j in range(0,8):
-        buttonLevel[j] = pg.Rect(int((0.08 + 0.22* j) * resolution[0]), int(0.34 * resolution[1]), 200, 200)
+    buttonLevel = np.empty(8, dtype=pg.Rect)
+    ImageLevel = np.empty(8, dtype=pg.Rect)
+    for j in range(0, 8):
+        buttonLevel[j] = pg.Rect(int((0.08 + 0.22 * j) * resolution[0]), int(0.34 * resolution[1]), 200, 200)
         ImageLevel[j] = pg.image.load("Images/lvlscrshots/scrsht.png")
-        #ImageLevel[j].set_colorkey((255,255,255))
+        # ImageLevel[j].set_colorkey((255,255,255))
         ImageLevel[j] = pg.transform.scale(ImageLevel[j], (200, 200))
-    for j in range(4,8):
-        buttonLevel[j] = pg.Rect(int((-0.8 + 0.22* j) * resolution[0]), int(0.7 * resolution[1]), 200, 200)
-        ImageLevel[j] = pg.image.load("Images/lvlscrshots/scrshot"+str(j)+".png")
-        ImageLevel[j].set_colorkey((255,255,255))
+    for j in range(4, 8):
+        buttonLevel[j] = pg.Rect(int((-0.8 + 0.22 * j) * resolution[0]), int(0.7 * resolution[1]), 200, 200)
+        ImageLevel[j] = pg.image.load("Images/lvlscrshots/scrshot" + str(j) + ".png")
+        ImageLevel[j].set_colorkey((255, 255, 255))
         ImageLevel[j] = pg.transform.scale(ImageLevel[j], (200, 200))
-
-
 
     running = True
     levelStart = False
@@ -137,23 +137,18 @@ def levelSelect():
 
         mouseX, mouseY = pygame.mouse.get_pos()
 
-
-
-        if backbutton.collidepoint((mouseX,mouseY)):
+        if backbutton.collidepoint((mouseX, mouseY)):
             if click:
                 pg.mixer.Sound.play(clickSound)
                 running = False
 
-
-
-
         screen.blit(mainMenuBackground, (0, 0))
         screen.blit(backbuttonImage, backbutton)
-        screen.blit(Leveltext, (510,50))
+        screen.blit(Leveltext, (510, 50))
 
         for k in range(8):
             screen.blit(ImageLevel[k], buttonLevel[k])
-            screen.blit(text_func(k,42,(0,0,255)),((buttonLevel[k][0])+90,(buttonLevel[k][1])+170))
+            screen.blit(text_func(k, 42, (0, 0, 255)), ((buttonLevel[k][0]) + 90, (buttonLevel[k][1]) + 170))
 
         for i in range(8):
             if buttonLevel[i].collidepoint((mouseX, mouseY)):
@@ -166,20 +161,22 @@ def levelSelect():
 
 
 def level(lvlnumb):
+
     GameStartTime = pygame.time.get_ticks() / 1000.
     running = True
+    global tries
+    tries = 0
 
     Space = Environment(resolution)
 
-    PlanetPosition = [(500, 200),(200, 300),(700, 500)]
-
+    PlanetPosition = [(500, 200), (200, 300), (700, 500)]
 
     Space.addPlanet(5e5, PlanetPosition[0])
     Space.addPlanet(3e5, PlanetPosition[1])
     Space.addPlanet(1e6, PlanetPosition[2])
     Space.calcTotalGravityField()
     scCoords = (40, 350)
-    targetPosition = (800,400)
+    targetPosition = (800, 400)
     projectileCoords = (scCoords[0] + 30, scCoords[1] + 10)
     Projectile = Missile(1, projectileCoords)
 
@@ -213,7 +210,7 @@ def level(lvlnumb):
                     explosion = False
                     imageNumb = 0
                     soundOn = True
-
+                    tries += 1
 
         if backbutton.collidepoint((mouseX, mouseY)):
             if click:
@@ -235,10 +232,7 @@ def level(lvlnumb):
                 pass
             else:
                 fireProjectile = False
-                ready, explosion, xProj,yProj, win = Projectile.ReturnPositions(screen, PlanetPosition,targetPosition)
-
-
-
+                ready, explosion, xProj, yProj, win = Projectile.ReturnPositions(screen, PlanetPosition, targetPosition)
 
         if explosion:
 
@@ -250,10 +244,11 @@ def level(lvlnumb):
             if win:
                 timeWin.append(pygame.time.get_ticks() / 1000.)
                 if gameTime - timeWin[0] > 1:
-                    main_menu()
-
+                    winnerScreen()
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
+
+    return tries
 
 
 def options_menu(volume):
@@ -316,8 +311,8 @@ def options_menu(volume):
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
 
-def loadingscreen():
 
+def winnerScreen():
     running = True
     while running:
         click = False
@@ -337,19 +332,13 @@ def loadingscreen():
                 if event.button == 1:
                     click = True
 
-
-
         screen.blit(mainMenuBackground, (0, 0))
-        screen.blit(text_func("Loading Level",200,(0,0,255)),(140,140))
-        pg.time.wait(3000)
-        running = False
-
-
-
-
+        screen.blit(youWinText, (340, 20))
+        screen.blit(text_func((f'Number of tries: {tries}'), 60, (0, 0, 255)), (380, 200))
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
 
 
 main_menu()
+#winnerScreen()
