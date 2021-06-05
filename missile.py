@@ -64,15 +64,16 @@ class Missile:
 
 				if distance <= 50:
 					ready = True
-					print(distance)
 					explosion = True
-					return ready, explosion, xProj, yProj
+					win = False
+					return ready, explosion, xProj, yProj, win
 
 			targetDistance = ((xProj-(targetPosition[0]+20))**2 + (yProj- (targetPosition[1])+10)**2)**0.5
 			if targetDistance <= 24:
 				ready = True
 				explosion = True
-				return ready, explosion, xProj, yProj
+				win = True
+				return ready, explosion, xProj, yProj, win
 
 
 

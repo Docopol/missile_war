@@ -13,17 +13,18 @@ resolution = (1280, 720)
 screen = pg.display.set_mode(resolution)
 pg.mouse.set_cursor(pg.cursors.diamond)
 
-# background music
+# Sounds
 pg.mixer.init(48000,-16,1,10240)
-thing = backGroundMusic = pygame.mixer.music.load("Star-Wars-Main-Theme-_Full_.ogg")
+thing = backGroundMusic = pygame.mixer.music.load("Sounds/Star-Wars-Main-Theme-_Full_.ogg")
 pygame.mixer.music.play(-1, 0.0)
 volume = 0.3
 pg.mixer.music.set_volume(volume)
-boomsound = pg.mixer.Sound("Explosion Sound Effect.wav")
+boomsound = pg.mixer.Sound("Sounds/Explosion Sound Effect.wav")
 boomsound.set_volume(0.15)
-launchSound = pg.mixer.Sound("RPG sound effect.wav")
+launchSound = pg.mixer.Sound("Sounds/RPG sound effect.wav")
 launchSound.set_volume(0.15)
-
+clickSound = pg.mixer.Sound("Sounds/Button_Plate Click (Minecraft Sound) - Sound Effect for editing.wav")
+clickSound.set_volume(1)
 
 # setting background
 pg.display.set_caption("Missile war")
@@ -40,6 +41,7 @@ mainMenuText = pg.image.load("Images/Missile War.png")
 backbuttonImage = pg.image.load("Images/Buttons/button_back.png")
 backbuttonImage = pg.transform.scale(backbuttonImage, (50, 50))
 spaceshipImage = pg.image.load("Images/spaceship.png")
+pg.display.set_icon(spaceshipImage)
 spaceshipImage = pg.transform.scale(spaceshipImage, (96, 54))
 lvl1screenshot = pg.image.load("Images/lvlscrshots/scrsht.png")
 Leveltext = pg.image.load("Images/Level.png")
@@ -66,12 +68,15 @@ def main_menu():
 
         if button_1.collidepoint((mouseX, mouseY)):
             if click:
+                pg.mixer.Sound.play(clickSound)
                 levelSelect()
         if button_2.collidepoint((mouseX, mouseY)):
             if click:
+                pg.mixer.Sound.play(clickSound)
                 options_menu(volume)
         if button_3.collidepoint((mouseX, mouseY)):
             if click:
+                pg.mixer.Sound.play(clickSound)
                 pg.quit()
                 sys.exit()
 
@@ -136,6 +141,7 @@ def levelSelect():
 
         if backbutton.collidepoint((mouseX,mouseY)):
             if click:
+                pg.mixer.Sound.play(clickSound)
                 running = False
 
 
@@ -152,6 +158,7 @@ def levelSelect():
         for i in range(8):
             if buttonLevel[i].collidepoint((mouseX, mouseY)):
                 if click:
+                    pg.mixer.Sound.play(clickSound)
                     level(i)
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
@@ -180,6 +187,7 @@ def level(lvlnumb):
     fireProjectile = False
     explosion = False
     soundOn = True
+    timeWin = []
 
     while running:
 
@@ -209,6 +217,7 @@ def level(lvlnumb):
 
         if backbutton.collidepoint((mouseX, mouseY)):
             if click:
+                pg.mixer.Sound.play(clickSound)
                 running = False
 
         screen.blit(background, (0, 0))
@@ -221,13 +230,13 @@ def level(lvlnumb):
 
         firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
 
-        if (fireProjectile == True):
-            if Projectile.ReturnPositions(screen, PlanetPosition,targetPosition) == False:
+        if fireProjectile:
+            if not Projectile.ReturnPositions(screen, PlanetPosition, targetPosition):
                 pass
             else:
-
                 fireProjectile = False
-                ready, explosion, xProj,yProj = Projectile.ReturnPositions(screen, PlanetPosition,targetPosition)
+                ready, explosion, xProj,yProj, win = Projectile.ReturnPositions(screen, PlanetPosition,targetPosition)
+
 
 
 
@@ -238,6 +247,10 @@ def level(lvlnumb):
             if soundOn:
                 pg.mixer.Sound.play(boomsound)
                 soundOn = False
+            if win:
+                timeWin.append(pygame.time.get_ticks() / 1000.)
+                if gameTime - timeWin[0] > 1:
+                    main_menu()
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
@@ -273,18 +286,20 @@ def options_menu(volume):
         mouseX, mouseY = pygame.mouse.get_pos()
         if backbutton.collidepoint((mouseX, mouseY)):
             if click:
+                pg.mixer.Sound.play(clickSound)
                 running = False
 
         if buttonVolumeUp.collidepoint((mouseX, mouseY)):
             if click:
+                pg.mixer.Sound.play(clickSound)
                 volume -= 0.1
-                pg.mixer.Sound.play(boomsound)
                 if volume <= 0:
                     volume = 0
                 pg.mixer.music.set_volume(volume)
 
         if buttonVolumeDown.collidepoint((mouseX, mouseY)):
             if click:
+                pg.mixer.Sound.play(clickSound)
                 volume += 0.1
                 if volume >= 1:
                     volume = 1
@@ -301,8 +316,7 @@ def options_menu(volume):
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
 
-'''def loadingscreen():
-
+def loadingscreen():
 
     running = True
     while running:
@@ -335,7 +349,7 @@ def options_menu(volume):
 
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
-        pg.display.flip()  # displaying on the screen'''
+        pg.display.flip()  # displaying on the screen
 
 
 main_menu()
