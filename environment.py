@@ -10,7 +10,7 @@ class Environment:
         self.xLength = size[0]
         self.yLength = size[1]
         
-        self.x = np.linspace(0, 1080, size[0])
+        self.x = np.linspace(0, 1280, size[0])
         self.y = np.linspace(0, 720, size[1])
         
         self.X, self.Y = np.meshgrid(self.x, self.y)
@@ -30,7 +30,7 @@ class Environment:
         if self.imageNumb > numberOfImages:
             self.imageNumb = 0
         n = str(round(self.imageNumb))
-        filename = "Images/planet1/planet"+ str(planetNumb) + "-"+ str(n) + ".png"
+        filename = "Images/planet"+ str(planetNumb) +"/planet"+ str(planetNumb) + "-"+ str(n) + ".png"
         planetImage = pg.image.load(filename)
         screen.blit(planetImage, (self.planets[planetNumb-1][1][0]-imageSize/2, self.planets[planetNumb-1][1][1]-imageSize/2))
         pass

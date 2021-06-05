@@ -1,8 +1,10 @@
 import sys
+
+import numpy as np
 import pygame.time
 import pygame as pg
 
-from Usefullfunctions import *
+from functionsGame import *
 from environment import Environment
 from missile import Missile
 
@@ -46,16 +48,17 @@ Click = False
 
 
 def main_menu():
+    alpha = 0
     while True:
         gameTime = pygame.time.get_ticks() / 1000.
         screen.blit(mainMenuBackground, (0, 0))
-        screen.blit(mainMenuText, (180, 100))
+        alpha = fade(screen, mainMenuText, (180, 100), alpha)
 
         mouseX, mouseY = pygame.mouse.get_pos()
 
         if button_1.collidepoint((mouseX, mouseY)):
             if click:
-                game()
+                level(1)
         if button_2.collidepoint((mouseX, mouseY)):
             if click:
                 options_menu(volume)
@@ -82,9 +85,74 @@ def main_menu():
         pg.display.flip()
 
 
+''''def levelSelect():
+    # button stuff - sorry for being a lazy bitch in this part
+    buttonLevel = np.zeros(8)
+    for j in range(0,8):
+        buttonLevel[j] = pg.Rect(int((0.12 + 0.08* j) * resolution[0]), int(0. * resolution[1]), 100, 100)
+    buttonLevel1 = pg.Rect(int(0.32 * resolution[0]), int(0. * resolution[1]), 200, 200)
+    buttonLevel2 = pg.Rect(int(0.42 * resolution[0]), int(0.5 * resolution[1]), 200, 200)
+    buttonLevel3 = pg.Rect(int(0.62 * resolution[0]), int(0.5 * resolution[1]), 200, 200)
+    buttonLevel4 = pg.Rect(int(0.62 * resolution[0]), int(0.5 * resolution[1]), 200, 200)
+    buttonLevel5 = pg.Rect(int(0.32 * resolution[0]), int(0.8 * resolution[1]), 200, 200)
+    buttonLevel6 = pg.Rect(int(0.42 * resolution[0]), int(0.8 * resolution[1]), 200, 200)
+    buttonLevel7 = pg.Rect(int(0.52 * resolution[0]), int(0.8 * resolution[1]), 200, 200)
+    buttonLevel8 = pg.Rect(int(0.62 * resolution[0]), int(0.8 * resolution[1]), 200, 200)
 
-def game():
-    level(1)
+
+    ImageLevel1 = pg.image.load("Images/lvlscrshots/scrsht.png")
+    ImageLevel1 = pg.transform.scale(ImageLevel1, (200, 200))
+    ImageLevel2 = pg.image.load("Images/lvlscrshots/scrsht.png")
+    ImageLevel2 = pg.transform.scale(ImageLevel1, (200, 200))
+    ImageLevel3 = pg.image.load("Images/lvlscrshots/scrsht.png")
+    ImageLevel3 = pg.transform.scale(ImageLevel1, (200, 200))
+    ImageLevel4 = pg.image.load("Images/lvlscrshots/scrsht.png")
+    ImageLevel4 = pg.transform.scale(ImageLevel1, (200, 200))
+    ImageLevel5 = pg.image.load("Images/lvlscrshots/scrsht.png")
+    ImageLevel5 = pg.transform.scale(ImageLevel1, (200, 200))
+    ImageLevel6 = pg.image.load("Images/lvlscrshots/scrsht.png")
+    ImageLevel6 = pg.transform.scale(ImageLevel1, (200, 200))
+    ImageLevel7 = pg.image.load("Images/lvlscrshots/scrsht.png")
+    ImageLevel7 = pg.transform.scale(ImageLevel1, (200, 200))
+    ImageLevel8 = pg.image.load("Images/lvlscrshots/scrsht.png")
+    ImageLevel8 = pg.transform.scale(ImageLevel1, (200, 200))
+
+
+    running = True
+    while running:
+        click = False
+        gameTime = pygame.time.get_ticks() / 1000.
+
+        for event in pygame.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    running = False
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        mouseX, mouseY = pygame.mouse.get_pos()
+        for i in range(8):
+            if buttonLevel[i].collidepoint((mouseX, mouseY)):
+                if click:
+                    level(i)
+
+
+        screen.blit(mainMenuBackground, (0, 0))
+        screen.blit(backbuttonImage, backbutton)
+
+        for k in range(8):
+            screen.blit(ImageLevel[k], buttonVolumeDown)
+        screen.blit(buttonRightImage, buttonVolumeUp)
+
+        housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
+        pg.display.flip()  # displaying on the screen'''
 
 
 def level(levelNb):
@@ -95,11 +163,13 @@ def level(levelNb):
     background = pg.transform.scale(background, resolution)
 
     Space = Environment(resolution)
-    
-    Space.addPlanet(5e5, (400, 200))
+
+    Space.addPlanet(5e5, (500, 200))
+    Space.addPlanet(3e5, (200, 300))
+    Space.addPlanet(1e6, (700, 500))
     Space.calcTotalGravityField()
     scCoords = (40, 350)
-    Projectile = Missile(1, scCoords)
+    Projectile = Missile(1, (scCoords[0] + 30, scCoords[1] + 10))
 
     imageNumb = 0
     fireProjectile = False
@@ -130,21 +200,24 @@ def level(levelNb):
         screen.blit(background, (0, 0))
         screen.blit(backbuttonImage, backbutton)
 
-        # screen.blit(Planets.Planets.planetVisual(self=0, planetNumb=1), (planet1Position))
-        Space.showPlanet(1, screen, 300)
-        screen.blit(target, (520, 250))
-
-        if(fireProjectile ==  True):
-            Projectile.ReturnPositions(screen)
+        Space.showPlanet(1, screen, 200)
+        Space.showPlanet(2, screen, 100)
+        Space.showPlanet(3, screen, 200)
+        screen.blit(target, (800, 400))
 
         firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
-        # screen.blit(Planets.Planets.planet2Visual(self=0), (200, 200))
 
+        if (fireProjectile == True):
+            if Projectile.ReturnPositions(screen) == False:
+                pass
+            else:
+                running = False
+                level(levelNb)
+                # fireProjectile = False
+        print(fireProjectile)
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
-
-
 
 
 def options_menu(volume):

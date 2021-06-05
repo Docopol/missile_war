@@ -27,16 +27,31 @@ def housekeepingdata(gameTime,resolution,screen):
 def playermove(screen, mouseX, mouseY, scCoords):
     #trigonometry
     opposite = scCoords[1] +27 - mouseY
-    adjacent = mouseX - scCoords[0] + 48
+    adjacent = mouseX - scCoords[0] + 80
     angle = round(math.atan2(opposite,adjacent) / math.pi *180)
-    if angle < - 49:
-        angle = -49
-    if angle > 49:
-        angle = 49
+    if angle < - 90:
+        angle = -90
+    if angle > 90:
+        angle = 90
 
     filename = "Images/spacecraft/sc" + str(angle) +".png"
     playerimage = pg.image.load(filename)
     screen.blit(playerimage,(scCoords))
 
     return -angle
+
+def fade(screen, image, position,alpha):
+
+        image.set_alpha(alpha)
+        screen.blit(image,(position))
+        alpha = float(alpha) + 0.7
+        return alpha
+
+class LoadingImages:
+    def __init__(self):
+        pass
+
+
+
+
 

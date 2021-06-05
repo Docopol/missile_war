@@ -1,4 +1,6 @@
-import numpy as np 
+import math
+
+import numpy as np
 import pygame as pg
 
 class Missile:
@@ -21,7 +23,7 @@ class Missile:
 
 		for index, value in enumerate(time):
 
-			if((round(xPos[index])>= 1280) or (round(xPos[index]) <= 0) or (round(yPos[index]) >= 720) or (round(yPos[index]) <= -50)):
+			if((round(xPos[index])>= 1280) or (round(xPos[index]) <= -200) or (round(yPos[index]) >= 720) or (round(yPos[index]) <= -200)):
 				break
 
 			newX = xPos[index] + xSpeed[index]*self.dt + environment.Gx[round(yPos[index]), round(xPos[index])]*self.dt**2/2 
@@ -36,12 +38,22 @@ class Missile:
 
 		self.xFinal = xPos
 		self.yFinal = yPos
+		self.xSpeed = xSpeed
+		self.ySpeed = ySpeed
 
 	def ReturnPositions(self, screen):
-		filename = "Images/Missile/projectile0.png"
-		missileImage = pg.image.load(filename)
+		ready = False
+
 
 		if(self.timeStep < len(self.xFinal)):
-			screen.blit(missileImage, (self.xFinal[self.timeStep], self.yFinal[self.timeStep]))
+			vx = self.xSpeed[self.timeStep]
+			vy = self.ySpeed[self.timeStep]
+			phi = -math.atan2(vy, vx) * 180 / math.pi
 
+			filename = "Images/Missile/projectile" + str(round(phi)) + ".png"
+			missileImage = pg.image.load(filename)
+			screen.blit(missileImage, (self.xFinal[self.timeStep], self.yFinal[self.timeStep]))
+		else:
+			ready = True
 		self.timeStep += 3
+		return ready
