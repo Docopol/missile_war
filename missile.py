@@ -58,7 +58,7 @@ class Missile:
 #			missileRect = pygame.Rect(missileImage)
 
 			#calculating distance between objects
-			xProj,yProj = self.xFinal[self.timeStep]+61, self.yFinal[self.timeStep]+10
+			xProj,yProj = self.xFinal[self.timeStep]+50, self.yFinal[self.timeStep]+10
 			for object in range(len(Planetposition)):
 				distance = ((xProj+-(Planetposition[object][0]))**2 + (yProj-Planetposition[object][1])**2)**0.5
 

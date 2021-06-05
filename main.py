@@ -1,8 +1,8 @@
 import sys
-
 import numpy as np
 import pygame.time
 import pygame as pg
+import os
 
 from functionsGame import *
 from environment import Environment
@@ -14,11 +14,16 @@ screen = pg.display.set_mode(resolution)
 pg.mouse.set_cursor(pg.cursors.diamond)
 
 # background music
-pg.mixer.init()
+pg.mixer.init(48000,-16,1,10240)
 thing = backGroundMusic = pygame.mixer.music.load("Star-Wars-Main-Theme-_Full_.ogg")
 pygame.mixer.music.play(-1, 0.0)
-volume = 0.0
+volume = 0.3
 pg.mixer.music.set_volume(volume)
+boomsound = pg.mixer.Sound("Explosion Sound Effect.wav")
+boomsound.set_volume(0.15)
+launchSound = pg.mixer.Sound("RPG sound effect.wav")
+launchSound.set_volume(0.15)
+
 
 # setting background
 pg.display.set_caption("Missile war")
@@ -106,6 +111,7 @@ def levelSelect():
 
 
     running = True
+    levelStart = False
     while running:
         click = False
         gameTime = pygame.time.get_ticks() / 1000.
@@ -125,13 +131,14 @@ def levelSelect():
                     click = True
 
         mouseX, mouseY = pygame.mouse.get_pos()
-        for i in range(8):
-            if buttonLevel[i].collidepoint((mouseX, mouseY)):
-                if click:
-                    level(i)
+
+
+
         if backbutton.collidepoint((mouseX,mouseY)):
             if click:
                 running = False
+
+
 
 
         screen.blit(mainMenuBackground, (0, 0))
@@ -142,11 +149,16 @@ def levelSelect():
             screen.blit(ImageLevel[k], buttonLevel[k])
             screen.blit(text_func(k,42,(0,0,255)),((buttonLevel[k][0])+90,(buttonLevel[k][1])+170))
 
+        for i in range(8):
+            if buttonLevel[i].collidepoint((mouseX, mouseY)):
+                if click:
+                    level(i)
+
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen'''
 
 
-def level(lvlNumb):
+def level(lvlnumb):
     GameStartTime = pygame.time.get_ticks() / 1000.
     running = True
 
@@ -167,11 +179,13 @@ def level(lvlNumb):
     imageNumb = 0
     fireProjectile = False
     explosion = False
+    soundOn = True
 
     while running:
 
         gameTime = pygame.time.get_ticks() / 1000.
         click = False
+
         mouseX, mouseY = pygame.mouse.get_pos()
         firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
         for event in pygame.event.get():
@@ -185,10 +199,12 @@ def level(lvlNumb):
                 if event.key == pg.K_ESCAPE:
                     running = False
                 if event.key == pg.K_SPACE:
+                    pg.mixer.Sound.play(launchSound, maxtime=3000)
                     Projectile.Launch(60, firingAngle, Space)
                     fireProjectile = True
                     explosion = False
                     imageNumb = 0
+                    soundOn = True
 
 
         if backbutton.collidepoint((mouseX, mouseY)):
@@ -216,8 +232,12 @@ def level(lvlNumb):
 
 
         if explosion:
-            imageNumb = ExplosionFunc(screen,imageNumb, xProj,yProj,explosion)[0]
-            explosion = ExplosionFunc(screen,imageNumb, xProj,yProj,explosion)[1]
+
+            imageNumb = ExplosionFunc(screen, imageNumb, xProj, yProj, explosion)[0]
+            explosion = ExplosionFunc(screen, imageNumb, xProj, yProj, explosion)[1]
+            if soundOn:
+                pg.mixer.Sound.play(boomsound)
+                soundOn = False
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
@@ -258,6 +278,7 @@ def options_menu(volume):
         if buttonVolumeUp.collidepoint((mouseX, mouseY)):
             if click:
                 volume -= 0.1
+                pg.mixer.Sound.play(boomsound)
                 if volume <= 0:
                     volume = 0
                 pg.mixer.music.set_volume(volume)
@@ -279,6 +300,42 @@ def options_menu(volume):
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
+
+'''def loadingscreen():
+
+
+    running = True
+    while running:
+        click = False
+        gameTime = pygame.time.get_ticks() / 1000.
+
+        for event in pygame.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    running = False
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+
+
+        screen.blit(mainMenuBackground, (0, 0))
+        screen.blit(text_func("Loading Level",200,(0,0,255)),(140,140))
+        pg.time.wait(3000)
+        running = False
+
+
+
+
+
+        housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
+        pg.display.flip()  # displaying on the screen'''
 
 
 main_menu()

@@ -54,7 +54,6 @@ def ExplosionFunc(screen, imageNumb, xProj,yProj,explosion):
     numberOfImages = 47
     if imageNumb > numberOfImages:
         explosion = False
-        print("fuck")
     n = str(round(imageNumb))
     filename = "Images/Explosion/expl-"+ str(n) + ".png"
     boomImage = pg.image.load(filename)
