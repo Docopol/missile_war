@@ -23,7 +23,7 @@ class Environment:
     def addPlanet(self, mass, position):
         self.planets.append((mass, position))
 
-    def showPlanet(self, planetNumb, screen):
+    def showPlanet(self, planetNumb, screen, imageSize):
         dt = 0.001
         self.imageNumb += dt * 100
         numberOfImages = 399
@@ -32,7 +32,7 @@ class Environment:
         n = str(round(self.imageNumb))
         filename = "Images/planet1/planet"+ str(planetNumb) + "-"+ str(n) + ".png"
         planetImage = pg.image.load(filename)
-        screen.blit(planetImage, self.planets[planetNumb-1][1])
+        screen.blit(planetImage, (self.planets[planetNumb-1][1][0]-imageSize/2, self.planets[planetNumb-1][1][1]-imageSize/2))
         pass
     def calcTotalGravityField(self):
         for planet in self.planets:

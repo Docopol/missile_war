@@ -25,7 +25,7 @@ def housekeepingdata(gameTime,resolution,screen):
 
 
 def playermove(screen, mouseX, mouseY, scCoords):
-    #triginometrie
+    #trigonometry
     opposite = scCoords[1] +27 - mouseY
     adjacent = mouseX - scCoords[0] + 48
     angle = round(math.atan2(opposite,adjacent) / math.pi *180)
@@ -38,4 +38,5 @@ def playermove(screen, mouseX, mouseY, scCoords):
     playerimage = pg.image.load(filename)
     screen.blit(playerimage,(scCoords))
 
+    return -angle
 
