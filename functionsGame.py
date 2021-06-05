@@ -47,9 +47,19 @@ def fade(screen, image, position,alpha):
         alpha = float(alpha) + 0.7
         return alpha
 
-class LoadingImages:
-    def __init__(self):
-        pass
+
+def ExplosionFunc(screen, imageNumb, xProj,yProj,explosion):
+    dt = 0.001
+    imageNumb += dt * 300
+    numberOfImages = 47
+    if imageNumb > numberOfImages:
+        explosion = False
+        print("fuck")
+    n = str(round(imageNumb))
+    filename = "Images/Explosion/expl-"+ str(n) + ".png"
+    boomImage = pg.image.load(filename)
+    screen.blit(boomImage, (xProj-150,yProj-110))
+    return imageNumb, explosion
 
 
 

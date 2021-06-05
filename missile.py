@@ -1,6 +1,7 @@
 import math
 
 import numpy as np
+import pygame
 import pygame as pg
 
 class Missile:
@@ -17,6 +18,7 @@ class Missile:
 		yPos = [self.position[1],]
 		xSpeed = [speed*np.cos(np.radians(angle)), ]
 		ySpeed = [speed*np.sin(np.radians(angle)), ]
+		timeStep = 0
 
 		time = np.arange(0, self.maxTime, self.dt)
 
@@ -40,6 +42,7 @@ class Missile:
 		self.yFinal = yPos
 		self.xSpeed = xSpeed
 		self.ySpeed = ySpeed
+		self.timeStep = timeStep
 
 	def ReturnPositions(self, screen, Planetposition,targetPosition): #insert object position
 		ready = False
@@ -52,19 +55,24 @@ class Missile:
 
 			filename = "Images/Missile/projectile" + str(round(phi)) + ".png"
 			missileImage = pg.image.load(filename)
+#			missileRect = pygame.Rect(missileImage)
 
 			#calculating distance between objects
-			xProj,yProj = self.xFinal[self.timeStep], self.yFinal[self.timeStep]
+			xProj,yProj = self.xFinal[self.timeStep]+61, self.yFinal[self.timeStep]+10
 			for object in range(len(Planetposition)):
-				distance = (((xProj+61)-(Planetposition[object][0]))**2 + ((yProj-10)-Planetposition[object][1])**2)**0.5
+				distance = ((xProj+-(Planetposition[object][0]))**2 + (yProj-Planetposition[object][1])**2)**0.5
 
 				if distance <= 50:
 					ready = True
 					print(distance)
+					explosion = True
+					return ready, explosion, xProj, yProj
 
-			targetDistance = (((xProj+61)-(targetPosition[0]+33))**2 + ((yProj+10)- (targetPosition[1])-10)**2)**0.5
+			targetDistance = ((xProj-(targetPosition[0]+20))**2 + (yProj- (targetPosition[1])+10)**2)**0.5
 			if targetDistance <= 24:
 				ready = True
+				explosion = True
+				return ready, explosion, xProj, yProj
 
 
 

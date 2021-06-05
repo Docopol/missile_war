@@ -17,7 +17,7 @@ pg.mouse.set_cursor(pg.cursors.diamond)
 pg.mixer.init()
 thing = backGroundMusic = pygame.mixer.music.load("Star-Wars-Main-Theme-_Full_.ogg")
 pygame.mixer.music.play(-1, 0.0)
-volume = 0.3
+volume = 0.0
 pg.mixer.music.set_volume(volume)
 
 # setting background
@@ -155,9 +155,9 @@ def level(lvlNumb):
     PlanetPosition = [(500, 200),(200, 300),(700, 500)]
 
 
-    # Space.addPlanet(5e5, PlanetPosition[0])
-    # Space.addPlanet(3e5, PlanetPosition[1])
-    # Space.addPlanet(1e6, PlanetPosition[2])
+    Space.addPlanet(5e5, PlanetPosition[0])
+    Space.addPlanet(3e5, PlanetPosition[1])
+    Space.addPlanet(1e6, PlanetPosition[2])
     Space.calcTotalGravityField()
     scCoords = (40, 350)
     targetPosition = (800,400)
@@ -166,6 +166,7 @@ def level(lvlNumb):
 
     imageNumb = 0
     fireProjectile = False
+    explosion = False
 
     while running:
 
@@ -186,6 +187,8 @@ def level(lvlNumb):
                 if event.key == pg.K_SPACE:
                     Projectile.Launch(60, firingAngle, Space)
                     fireProjectile = True
+                    explosion = False
+                    imageNumb = 0
 
 
         if backbutton.collidepoint((mouseX, mouseY)):
@@ -195,9 +198,9 @@ def level(lvlNumb):
         screen.blit(background, (0, 0))
         screen.blit(backbuttonImage, backbutton)
 
-        # Space.showPlanet(1, screen, 300)
-        # Space.showPlanet(2, screen, 100)
-        # Space.showPlanet(3, screen, 200)
+        Space.showPlanet(1, screen, 300)
+        Space.showPlanet(2, screen, 100)
+        Space.showPlanet(3, screen, 200)
         screen.blit(target, targetPosition)
 
         firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
@@ -206,10 +209,15 @@ def level(lvlNumb):
             if Projectile.ReturnPositions(screen, PlanetPosition,targetPosition) == False:
                 pass
             else:
-                running = False
-                level(1)
-                # fireProjectile = False
-        #print(fireProjectile)
+
+                fireProjectile = False
+                ready, explosion, xProj,yProj = Projectile.ReturnPositions(screen, PlanetPosition,targetPosition)
+
+
+
+        if explosion:
+            imageNumb = ExplosionFunc(screen,imageNumb, xProj,yProj,explosion)[0]
+            explosion = ExplosionFunc(screen,imageNumb, xProj,yProj,explosion)[1]
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
