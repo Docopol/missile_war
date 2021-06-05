@@ -37,6 +37,9 @@ backbuttonImage = pg.transform.scale(backbuttonImage, (50, 50))
 spaceshipImage = pg.image.load("Images/spaceship.png")
 spaceshipImage = pg.transform.scale(spaceshipImage, (96, 54))
 lvl1screenshot = pg.image.load("Images/lvlscrshots/scrsht.png")
+Leveltext = pg.image.load("Images/Level.png")
+background = pg.image.load("Images/background.jpg")
+background = pg.transform.scale(background, resolution)
 
 # buttons
 button_1 = pg.Rect(int(0.22 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
@@ -58,7 +61,7 @@ def main_menu():
 
         if button_1.collidepoint((mouseX, mouseY)):
             if click:
-                level(1)
+                levelSelect()
         if button_2.collidepoint((mouseX, mouseY)):
             if click:
                 options_menu(volume)
@@ -85,37 +88,21 @@ def main_menu():
         pg.display.flip()
 
 
-''''def levelSelect():
+def levelSelect():
     # button stuff - sorry for being a lazy bitch in this part
-    buttonLevel = np.zeros(8)
+    buttonLevel = np.empty(8,dtype=pg.Rect)
+    ImageLevel = np.empty(8,dtype=pg.Rect)
     for j in range(0,8):
-        buttonLevel[j] = pg.Rect(int((0.12 + 0.08* j) * resolution[0]), int(0. * resolution[1]), 100, 100)
-    buttonLevel1 = pg.Rect(int(0.32 * resolution[0]), int(0. * resolution[1]), 200, 200)
-    buttonLevel2 = pg.Rect(int(0.42 * resolution[0]), int(0.5 * resolution[1]), 200, 200)
-    buttonLevel3 = pg.Rect(int(0.62 * resolution[0]), int(0.5 * resolution[1]), 200, 200)
-    buttonLevel4 = pg.Rect(int(0.62 * resolution[0]), int(0.5 * resolution[1]), 200, 200)
-    buttonLevel5 = pg.Rect(int(0.32 * resolution[0]), int(0.8 * resolution[1]), 200, 200)
-    buttonLevel6 = pg.Rect(int(0.42 * resolution[0]), int(0.8 * resolution[1]), 200, 200)
-    buttonLevel7 = pg.Rect(int(0.52 * resolution[0]), int(0.8 * resolution[1]), 200, 200)
-    buttonLevel8 = pg.Rect(int(0.62 * resolution[0]), int(0.8 * resolution[1]), 200, 200)
+        buttonLevel[j] = pg.Rect(int((0.08 + 0.22* j) * resolution[0]), int(0.34 * resolution[1]), 200, 200)
+        ImageLevel[j] = pg.image.load("Images/lvlscrshots/scrsht.png")
+        #ImageLevel[j].set_colorkey((255,255,255))
+        ImageLevel[j] = pg.transform.scale(ImageLevel[j], (200, 200))
+    for j in range(4,8):
+        buttonLevel[j] = pg.Rect(int((-0.8 + 0.22* j) * resolution[0]), int(0.7 * resolution[1]), 200, 200)
+        ImageLevel[j] = pg.image.load("Images/lvlscrshots/scrshot"+str(j)+".png")
+        ImageLevel[j].set_colorkey((255,255,255))
+        ImageLevel[j] = pg.transform.scale(ImageLevel[j], (200, 200))
 
-
-    ImageLevel1 = pg.image.load("Images/lvlscrshots/scrsht.png")
-    ImageLevel1 = pg.transform.scale(ImageLevel1, (200, 200))
-    ImageLevel2 = pg.image.load("Images/lvlscrshots/scrsht.png")
-    ImageLevel2 = pg.transform.scale(ImageLevel1, (200, 200))
-    ImageLevel3 = pg.image.load("Images/lvlscrshots/scrsht.png")
-    ImageLevel3 = pg.transform.scale(ImageLevel1, (200, 200))
-    ImageLevel4 = pg.image.load("Images/lvlscrshots/scrsht.png")
-    ImageLevel4 = pg.transform.scale(ImageLevel1, (200, 200))
-    ImageLevel5 = pg.image.load("Images/lvlscrshots/scrsht.png")
-    ImageLevel5 = pg.transform.scale(ImageLevel1, (200, 200))
-    ImageLevel6 = pg.image.load("Images/lvlscrshots/scrsht.png")
-    ImageLevel6 = pg.transform.scale(ImageLevel1, (200, 200))
-    ImageLevel7 = pg.image.load("Images/lvlscrshots/scrsht.png")
-    ImageLevel7 = pg.transform.scale(ImageLevel1, (200, 200))
-    ImageLevel8 = pg.image.load("Images/lvlscrshots/scrsht.png")
-    ImageLevel8 = pg.transform.scale(ImageLevel1, (200, 200))
 
 
     running = True
@@ -142,25 +129,26 @@ def main_menu():
             if buttonLevel[i].collidepoint((mouseX, mouseY)):
                 if click:
                     level(i)
+        if backbutton.collidepoint((mouseX,mouseY)):
+            if click:
+                running = False
 
 
         screen.blit(mainMenuBackground, (0, 0))
         screen.blit(backbuttonImage, backbutton)
+        screen.blit(Leveltext, (510,50))
 
         for k in range(8):
-            screen.blit(ImageLevel[k], buttonVolumeDown)
-        screen.blit(buttonRightImage, buttonVolumeUp)
+            screen.blit(ImageLevel[k], buttonLevel[k])
+            screen.blit(text_func(k,42,(0,0,255)),((buttonLevel[k][0])+90,(buttonLevel[k][1])+170))
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen'''
 
 
-def level(levelNb):
+def level(lvlNumb):
     GameStartTime = pygame.time.get_ticks() / 1000.
     running = True
-
-    background = pg.image.load("Images/background.jpg")
-    background = pg.transform.scale(background, resolution)
 
     Space = Environment(resolution)
 
@@ -169,7 +157,8 @@ def level(levelNb):
     Space.addPlanet(1e6, (700, 500))
     Space.calcTotalGravityField()
     scCoords = (40, 350)
-    Projectile = Missile(1, (scCoords[0] + 30, scCoords[1] + 10))
+    projectileCoords = (scCoords[0] + 30, scCoords[1] + 10)
+    Projectile = Missile(1, projectileCoords)
 
     imageNumb = 0
     fireProjectile = False
@@ -178,6 +167,8 @@ def level(levelNb):
 
         gameTime = pygame.time.get_ticks() / 1000.
         click = False
+        mouseX, mouseY = pygame.mouse.get_pos()
+        firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
         for event in pygame.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
@@ -192,7 +183,7 @@ def level(levelNb):
                     Projectile.Launch(60, firingAngle, Space)
                     fireProjectile = True
 
-        mouseX, mouseY = pygame.mouse.get_pos()
+
         if backbutton.collidepoint((mouseX, mouseY)):
             if click:
                 running = False
@@ -212,7 +203,7 @@ def level(levelNb):
                 pass
             else:
                 running = False
-                level(levelNb)
+                level(1)
                 # fireProjectile = False
         print(fireProjectile)
 
