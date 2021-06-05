@@ -155,11 +155,12 @@ def level(lvlNumb):
     PlanetPosition = [(500, 200),(200, 300),(700, 500)]
 
 
-    Space.addPlanet(5e5, PlanetPosition[0])
-    Space.addPlanet(3e5, PlanetPosition[1])
-    Space.addPlanet(1e6, PlanetPosition[2])
+    # Space.addPlanet(5e5, PlanetPosition[0])
+    # Space.addPlanet(3e5, PlanetPosition[1])
+    # Space.addPlanet(1e6, PlanetPosition[2])
     Space.calcTotalGravityField()
     scCoords = (40, 350)
+    targetPosition = (800,400)
     projectileCoords = (scCoords[0] + 30, scCoords[1] + 10)
     Projectile = Missile(1, projectileCoords)
 
@@ -194,15 +195,15 @@ def level(lvlNumb):
         screen.blit(background, (0, 0))
         screen.blit(backbuttonImage, backbutton)
 
-        Space.showPlanet(1, screen, 300)
-        Space.showPlanet(2, screen, 100)
-        Space.showPlanet(3, screen, 200)
-        screen.blit(target, (800, 400))
+        # Space.showPlanet(1, screen, 300)
+        # Space.showPlanet(2, screen, 100)
+        # Space.showPlanet(3, screen, 200)
+        screen.blit(target, targetPosition)
 
         firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
 
         if (fireProjectile == True):
-            if Projectile.ReturnPositions(screen, PlanetPosition) == False:
+            if Projectile.ReturnPositions(screen, PlanetPosition,targetPosition) == False:
                 pass
             else:
                 running = False

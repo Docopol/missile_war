@@ -41,7 +41,7 @@ class Missile:
 		self.xSpeed = xSpeed
 		self.ySpeed = ySpeed
 
-	def ReturnPositions(self, screen, Planetposition): #insert object position
+	def ReturnPositions(self, screen, Planetposition,targetPosition): #insert object position
 		ready = False
 
 
@@ -56,11 +56,15 @@ class Missile:
 			#calculating distance between objects
 			xProj,yProj = self.xFinal[self.timeStep], self.yFinal[self.timeStep]
 			for object in range(len(Planetposition)):
-				distance = (((xProj+61)-Planetposition[object][0])**2 + ((yProj+10)-Planetposition[object][1])**2)**0.5
+				distance = (((xProj+61)-(Planetposition[object][0]))**2 + ((yProj-10)-Planetposition[object][1])**2)**0.5
 
 				if distance <= 50:
 					ready = True
 					print(distance)
+
+			targetDistance = (((xProj+61)-(targetPosition[0]+33))**2 + ((yProj+10)- (targetPosition[1])-10)**2)**0.5
+			if targetDistance <= 24:
+				ready = True
 
 
 
