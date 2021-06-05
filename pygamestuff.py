@@ -33,7 +33,7 @@ backbuttonImage = pg.image.load("Images/Buttons/button_back.png")
 backbuttonImage = pg.transform.scale(backbuttonImage, (50, 50))
 spaceshipImage = pg.image.load("Images/spaceship.png")
 spaceshipImage = pg.transform.scale(spaceshipImage, (96, 54))
-#cursorImage =
+lvl1screenshot = pg.image.load("Images/lvlscrshots/scrsht.png")
 
 # buttons
 button_1 = pg.Rect(int(0.22 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
@@ -81,6 +81,7 @@ def main_menu():
         pg.display.flip()
 
 
+
 def game():
     level(1)
 
@@ -111,6 +112,8 @@ def level(levelNb):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     running = False
+                if event.key == pg.K_SPACE:
+                    print("wut")
 
         mouseX, mouseY = pygame.mouse.get_pos()
         if backbutton.collidepoint((mouseX, mouseY)):
