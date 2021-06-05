@@ -41,7 +41,7 @@ class Missile:
 		self.xSpeed = xSpeed
 		self.ySpeed = ySpeed
 
-	def ReturnPositions(self, screen):
+	def ReturnPositions(self, screen, Planetposition): #insert object position
 		ready = False
 
 
@@ -52,6 +52,17 @@ class Missile:
 
 			filename = "Images/Missile/projectile" + str(round(phi)) + ".png"
 			missileImage = pg.image.load(filename)
+
+			#calculating distance between objects
+			xProj,yProj = self.xFinal[self.timeStep], self.yFinal[self.timeStep]
+			for object in range(len(Planetposition)):
+				distance = (((xProj+61)-Planetposition[object][0])**2 + ((yProj+10)-Planetposition[object][1])**2)**0.5
+
+				if distance <= 50:
+					ready = True
+					print(distance)
+
+
 
 			if(self.xFinal[self.timeStep] <= 1280 or (self.xFinal[self.timeStep] >= -200) or (self.yFinal[self.timeStep] <= 720) or (self.yFinal[self.timeStep] >= -200)):
 				screen.blit(missileImage, (self.xFinal[self.timeStep], self.yFinal[self.timeStep]))

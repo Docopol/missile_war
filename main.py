@@ -152,9 +152,12 @@ def level(lvlNumb):
 
     Space = Environment(resolution)
 
-    Space.addPlanet(5e5, (500, 200))
-    Space.addPlanet(3e5, (200, 300))
-    Space.addPlanet(1e6, (700, 500))
+    PlanetPosition = [(500, 200),(200, 300),(700, 500)]
+
+
+    Space.addPlanet(5e5, PlanetPosition[0])
+    Space.addPlanet(3e5, PlanetPosition[1])
+    Space.addPlanet(1e6, PlanetPosition[2])
     Space.calcTotalGravityField()
     scCoords = (40, 350)
     projectileCoords = (scCoords[0] + 30, scCoords[1] + 10)
@@ -191,7 +194,7 @@ def level(lvlNumb):
         screen.blit(background, (0, 0))
         screen.blit(backbuttonImage, backbutton)
 
-        Space.showPlanet(1, screen, 200)
+        Space.showPlanet(1, screen, 300)
         Space.showPlanet(2, screen, 100)
         Space.showPlanet(3, screen, 200)
         screen.blit(target, (800, 400))
@@ -199,13 +202,13 @@ def level(lvlNumb):
         firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
 
         if (fireProjectile == True):
-            if Projectile.ReturnPositions(screen) == False:
+            if Projectile.ReturnPositions(screen, PlanetPosition) == False:
                 pass
             else:
                 running = False
                 level(1)
                 # fireProjectile = False
-        print(fireProjectile)
+        #print(fireProjectile)
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
