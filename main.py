@@ -343,13 +343,15 @@ def winnerScreen():
                 pg.quit()
                 sys.exit()
 
+        screen.blit(mainMenuBackground, (0, 0))
+        screen.blit(youWinText, (340, 20))
+
         screen.blit(button1Image, button_1)
         screen.blit(button2Image, button_2)
         screen.blit(button3Image, button_3)
 
 
-        screen.blit(mainMenuBackground, (0, 0))
-        screen.blit(youWinText, (340, 20))
+
         screen.blit(text_func((f'Number of tries: {tries} times'), 60, (116, 252, 114)), (380, 200))
         screen.blit(text_func((f'level time: {levelTime} seconds'), 60, (116, 252, 114)), (380, 300))
         screen.blit(text_func((f'total score: {totalScore} points'), 60, (116, 252, 114)), (380, 400))
