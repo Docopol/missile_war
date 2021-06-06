@@ -20,27 +20,30 @@ class Environment:
         self.planets = []
         self.imageNumb = 0
 
-    def addPlanet(self, mass, position):
-        self.planets.append((mass, position))
+    def addPlanet(self, planetNumb, imageSize, mass, position):
+        self.planets.append((planetNumb, imageSize, mass, position))
 
-    def showPlanet(self, planetNumb, screen, imageSize):
+    def showPlanets(self, screen):
         dt = 0.001
         self.imageNumb += dt * 100
         numberOfImages = 399
         if self.imageNumb > numberOfImages:
             self.imageNumb = 0
         n = str(round(self.imageNumb))
-        filename = "Images/planet"+ str(planetNumb) +"/planet"+ str(planetNumb) + "-"+ str(n) + ".png"
-        planetImage = pg.image.load(filename)
-        screen.blit(planetImage, (self.planets[planetNumb-1][1][0]-imageSize/2, self.planets[planetNumb-1][1][1]-imageSize/2))
-        pass
+
+        for planet in self.planets:
+            filename = "Images/planet"+ str(planet[0]) +"/planet"+ str(planet[0]) + "-"+ str(n) + ".png"
+            planetImage = pg.image.load(filename)
+            screen.blit(planetImage, (planet[3][0]-planet[1]/2, planet[3][1]-planet[1]/2))
+        
     def calcTotalGravityField(self):
         for planet in self.planets:
-            gx, gy = self.gravityField(*planet, x=self.X, y=self.Y)
-            self.Gx -= gx
-            self.Gy -= gy
+            if(planet != None):
+                gx, gy = self.gravityField(*planet, x=self.X, y=self.Y)
+                self.Gx -= gx
+                self.Gy -= gy
             
-    def gravityField(self, mass, r0, x, y):
+    def gravityField(self, number, imageSize, mass, r0, x, y):
         dist = np.hypot(x-r0[0], (y-r0[1]))**3
         return mass * (x - r0[0]) / dist, mass * (y - r0[1]) / dist
 

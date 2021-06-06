@@ -59,8 +59,8 @@ class Missile:
 
 			#calculating distance between objects
 			xProj,yProj = self.xFinal[self.timeStep]+50, self.yFinal[self.timeStep]+10
-			for object in range(len(Planetposition)):
-				distance = ((xProj+-(Planetposition[object][0]))**2 + (yProj-Planetposition[object][1])**2)**0.5
+			for planet in Planetposition:
+				distance = ((xProj-planet[0])**2 + (yProj-planet[1])**2)**0.5
 
 				if distance <= 50:
 					ready = True
@@ -74,8 +74,6 @@ class Missile:
 				explosion = True
 				win = True
 				return ready, explosion, xProj, yProj, win
-
-
 
 			if(self.xFinal[self.timeStep] <= 1280 or (self.xFinal[self.timeStep] >= -200) or (self.yFinal[self.timeStep] <= 720) or (self.yFinal[self.timeStep] >= -200)):
 				screen.blit(missileImage, (self.xFinal[self.timeStep], self.yFinal[self.timeStep]))

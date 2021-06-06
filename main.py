@@ -27,7 +27,7 @@ clickSound = pg.mixer.Sound("Sounds/Button_Plate Click (Minecraft Sound) - Sound
 clickSound.set_volume(1)
 
 # setting background
-pg.display.set_caption("Missile war")
+pg.display.set_caption("Mad Missile")
 
 # loading images
 button1Image = pg.image.load("Images/Buttons/button_play.png")
@@ -171,12 +171,11 @@ def level(lvlnumb):
 
     Space = Environment(resolution)
 
-    PlanetPosition = [(500, 200),(200, 300),(700, 500)]
+    PlanetPosition = [(500, 200),(700, 500)]
 
-
-    Space.addPlanet(5e5, PlanetPosition[0])
-    Space.addPlanet(3e5, PlanetPosition[1])
-    Space.addPlanet(1e6, PlanetPosition[2])
+    Space.addPlanet(0, 100, 5e5, PlanetPosition[0])
+    #Space.addPlanet(3e5, PlanetPosition[1])
+    Space.addPlanet(1, 300, 1e6, PlanetPosition[1])
     Space.calcTotalGravityField()
     scCoords = (40, 350)
     targetPosition = (800,400)
@@ -223,9 +222,8 @@ def level(lvlnumb):
         screen.blit(background, (0, 0))
         screen.blit(backbuttonImage, backbutton)
 
-        Space.showPlanet(1, screen, 300)
-        Space.showPlanet(2, screen, 100)
-        Space.showPlanet(3, screen, 200)
+        Space.showPlanets(screen)
+        
         screen.blit(target, targetPosition)
 
         firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
@@ -236,9 +234,6 @@ def level(lvlnumb):
             else:
                 fireProjectile = False
                 ready, explosion, xProj,yProj, win = Projectile.ReturnPositions(screen, PlanetPosition,targetPosition)
-
-
-
 
         if explosion:
 
