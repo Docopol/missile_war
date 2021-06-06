@@ -34,11 +34,14 @@ pg.display.set_caption("Mad Missile")
 button1Image = pg.image.load("Images/Buttons/button_play.png")
 button2Image = pg.image.load("Images/Buttons/button_options.png")
 button3Image = pg.image.load("Images/Buttons/button_quit.png")
+nextLevelButton = pg.image.load("Images/Buttons/button_next-level.png")
+retryLevelButton = pg.image.load("Images/Buttons/button_retry-level.png")
+mainMenuButton = pg.image.load("Images/Buttons/button_main-menu.png")
 mainMenuBackground = pg.image.load("Images/menuBackground.jpg")
 mainMenuBackground = pg.transform.scale(mainMenuBackground, resolution)
 target = pg.image.load("Images/target.png")
 target = pg.transform.scale(target, (int(0.05 * resolution[0]), int(0.035 * resolution[0])))
-mainMenuText = pg.image.load("Images/Text/Missile War.png")
+mainMenuText = pg.image.load("Images/Text/Mad Missile.png")
 backbuttonImage = pg.image.load("Images/Buttons/button_back.png")
 backbuttonImage = pg.transform.scale(backbuttonImage, (50, 50))
 spaceshipImage = pg.image.load("Images/spaceship.png")
@@ -65,9 +68,23 @@ def main_menu():
     while True:
         gameTime = pygame.time.get_ticks() / 1000.
         screen.blit(mainMenuBackground, (0, 0))
-        alpha = fade(screen, mainMenuText, (180, 100), alpha)
+        alpha = fade(screen, mainMenuText, (170, 100), alpha)
 
         mouseX, mouseY = pygame.mouse.get_pos()
+        click = False
+
+        screen.blit(button1Image, button_1)
+        screen.blit(button2Image, button_2)
+        screen.blit(button3Image, button_3)
+
+
+        for event in pygame.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
 
         if button_1.collidepoint((mouseX, mouseY)):
             if click:
@@ -83,18 +100,6 @@ def main_menu():
                 pg.quit()
                 sys.exit()
 
-        screen.blit(button1Image, button_1)
-        screen.blit(button2Image, button_2)
-        screen.blit(button3Image, button_3)
-
-        click = False
-        for event in pygame.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            if event.type == pg.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
 
@@ -157,7 +162,7 @@ def levelSelect():
                     pg.mixer.Sound.play(clickSound)
                     running = False
                     level(i)
-                    winnerScreen()
+                    #winnerScreen(i)
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen'''
@@ -236,7 +241,7 @@ def level(lvlnumb):
             if win:
                 timeWin.append(pygame.time.get_ticks() / 1000.)
                 if gameTime - timeWin[0] > 1:
-                    #winnerScreen()
+                    winnerScreen(lvlnumb)
                     running = False
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
@@ -306,7 +311,7 @@ def options_menu(volume):
         pg.display.flip()  # displaying on the screen
 
 
-def winnerScreen():
+def winnerScreen(levelNumber):
     running = True
     levelTime = round(pygame.time.get_ticks() / 1000. - GameStartTime)
     totalScore = round((1/levelTime +1/tries) *1000)
@@ -332,33 +337,35 @@ def winnerScreen():
         if button_1.collidepoint((mouseX, mouseY)):
             if click:
                 pg.mixer.Sound.play(clickSound)
-                levelSelect()
+                level(levelNumber+1)
+                running = False
         if button_2.collidepoint((mouseX, mouseY)):
             if click:
                 pg.mixer.Sound.play(clickSound)
-                options_menu(volume)
+                level(levelNumber)
+                running = False
         if button_3.collidepoint((mouseX, mouseY)):
             if click:
                 pg.mixer.Sound.play(clickSound)
-                pg.quit()
-                sys.exit()
+                main_menu()
+                running = False
 
         screen.blit(mainMenuBackground, (0, 0))
         screen.blit(youWinText, (340, 20))
 
-        screen.blit(button1Image, button_1)
-        screen.blit(button2Image, button_2)
-        screen.blit(button3Image, button_3)
+        screen.blit(nextLevelButton, button_1)
+        screen.blit(retryLevelButton, button_2)
+        screen.blit(mainMenuButton, button_3)
 
 
 
-        screen.blit(text_func((f'Number of tries: {tries} times'), 60, (116, 252, 114)), (380, 200))
-        screen.blit(text_func((f'level time: {levelTime} seconds'), 60, (116, 252, 114)), (380, 300))
-        screen.blit(text_func((f'total score: {totalScore} points'), 60, (116, 252, 114)), (380, 400))
+        screen.blit(text_func((f'Number of tries: {tries} times'), 60, (116, 252, 114)), (390, 200))
+        screen.blit(text_func((f'completion time: {levelTime} seconds'), 60, (116, 252, 114)), (390, 300))
+        screen.blit(text_func((f'total score: {totalScore} points'), 60, (116, 252, 114)), (390, 400))
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
 
 
 main_menu()
-#winnerScreen()
+
