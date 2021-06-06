@@ -32,7 +32,7 @@ class Environment:
         n = str(round(self.imageNumb))
 
         for planet in self.planets:
-            filename = "Images/planet"+ str(planet[0]) +"/planet"+ str(planet[0]) + "-"+ str(n) + ".png"
+            filename = "Images/planets/planet"+ str(planet[0]) +"/planet"+ str(planet[0]) + "-"+ str(n) + ".png"
             planetImage = pg.image.load(filename)
             screen.blit(planetImage, (planet[3][0]-planet[1]/2, planet[3][1]-planet[1]/2))
         
