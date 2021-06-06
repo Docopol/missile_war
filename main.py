@@ -154,17 +154,19 @@ def levelSelect():
             if buttonLevel[i].collidepoint((mouseX, mouseY)):
                 if click:
                     pg.mixer.Sound.play(clickSound)
+                    running = False
                     level(i)
+                    winnerScreen()
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen'''
 
 
 def level(lvlnumb):
-
+    global tries, GameStartTime
     GameStartTime = pygame.time.get_ticks() / 1000.
     running = True
-    global tries
+
     tries = 0
 
     Space = Environment(resolution)
@@ -243,7 +245,9 @@ def level(lvlnumb):
             if win:
                 timeWin.append(pygame.time.get_ticks() / 1000.)
                 if gameTime - timeWin[0] > 1:
-                    winnerScreen()
+                    #winnerScreen()
+                    running = False
+
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
 
@@ -313,10 +317,11 @@ def options_menu(volume):
 
 def winnerScreen():
     running = True
+    levelTime = round(pygame.time.get_ticks() / 1000. - GameStartTime)
+    totalScore = round((1/levelTime +1/tries) *1000)
     while running:
         click = False
         gameTime = pygame.time.get_ticks() / 1000.
-
         for event in pygame.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
@@ -331,9 +336,32 @@ def winnerScreen():
                 if event.button == 1:
                     click = True
 
+        mouseX, mouseY = pygame.mouse.get_pos()
+
+        if button_1.collidepoint((mouseX, mouseY)):
+            if click:
+                pg.mixer.Sound.play(clickSound)
+                levelSelect()
+        if button_2.collidepoint((mouseX, mouseY)):
+            if click:
+                pg.mixer.Sound.play(clickSound)
+                options_menu(volume)
+        if button_3.collidepoint((mouseX, mouseY)):
+            if click:
+                pg.mixer.Sound.play(clickSound)
+                pg.quit()
+                sys.exit()
+
+        screen.blit(button1Image, button_1)
+        screen.blit(button2Image, button_2)
+        screen.blit(button3Image, button_3)
+
+
         screen.blit(mainMenuBackground, (0, 0))
         screen.blit(youWinText, (340, 20))
-        screen.blit(text_func((f'Number of tries: {tries}'), 60, (0, 0, 255)), (380, 200))
+        screen.blit(text_func((f'Number of tries: {tries} times'), 60, (116, 252, 114)), (380, 200))
+        screen.blit(text_func((f'level time: {levelTime} seconds'), 60, (116, 252, 114)), (380, 300))
+        screen.blit(text_func((f'total score: {totalScore} points'), 60, (116, 252, 114)), (380, 400))
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
