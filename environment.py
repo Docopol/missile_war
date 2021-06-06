@@ -6,9 +6,7 @@ import matplotlib.pyplot as plt
 class Environment:
     gravitationParameter = 1
 
-    def __init__(self, size):
-        self.xLength = size[0]
-        self.yLength = size[1]
+    def __init__(self):
         
         self.x = np.linspace(-500, 1680, 2180)
         self.y = np.linspace(-500, 1220, 1720)
@@ -18,10 +16,12 @@ class Environment:
         self.Gx, self.Gy = np.zeros((2180, 1720)).T, np.zeros((2180, 1720)).T
         
         self.planets = []
+        self.planetPositions = []
         self.imageNumb = 0
 
     def addPlanet(self, planetNumb, imageSize, mass, position):
         self.planets.append((planetNumb, imageSize, mass, position))
+        self.planetPositions.append(position)
 
     def showPlanets(self, screen):
         dt = 0.001

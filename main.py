@@ -7,6 +7,7 @@ import os
 from functionsGame import *
 from environment import Environment
 from missile import Missile
+from levels import Level
 
 pg.init()  # initialise pygame
 resolution = (1280, 720)
@@ -15,8 +16,8 @@ pg.mouse.set_cursor(pg.cursors.diamond)
 
 # Sounds
 pg.mixer.init(48000, -16, 1, 10240)
-thing = backGroundMusic = pygame.mixer.music.load("Sounds/Star-Wars-Main-Theme-_Full_.ogg")
-pygame.mixer.music.play(-1, 0.0)
+# thing = backGroundMusic = pygame.mixer.music.load("Sounds/Star-Wars-Main-Theme-_Full_.ogg")
+# pygame.mixer.music.play(-1, 0.0)
 volume = 0.3
 pg.mixer.music.set_volume(volume)
 boomsound = pg.mixer.Sound("Sounds/Explosion Sound Effect.wav")
@@ -169,18 +170,8 @@ def level(lvlnumb):
 
     tries = 0
 
-    Space = Environment(resolution)
-
-    PlanetPosition = [(500, 200),(700, 500)]
-
-    Space.addPlanet(0, 100, 5e5, PlanetPosition[0])
-    #Space.addPlanet(3e5, PlanetPosition[1])
-    Space.addPlanet(1, 300, 1e6, PlanetPosition[1])
-    Space.calcTotalGravityField()
-    scCoords = (40, 350)
-    targetPosition = (800, 400)
-    projectileCoords = (scCoords[0] + 30, scCoords[1] + 10)
-    Projectile = Missile(1, projectileCoords)
+    #LevelCur = Level([(0, 100, 5e5, (500, 200)), (1, 300, 1e6, (700, 500))], (800, 400))
+    LevelCur = Level(lvlnumb)
 
     imageNumb = 0
     fireProjectile = False
@@ -207,7 +198,7 @@ def level(lvlnumb):
                     running = False
                 if event.key == pg.K_SPACE:
                     pg.mixer.Sound.play(launchSound, maxtime=3000)
-                    Projectile.Launch(60, firingAngle, Space)
+                    LevelCur.Projectile.Launch(60, firingAngle, Level.Space)
                     fireProjectile = True
                     explosion = False
                     imageNumb = 0
@@ -222,18 +213,18 @@ def level(lvlnumb):
         screen.blit(background, (0, 0))
         screen.blit(backbuttonImage, backbutton)
 
-        Space.showPlanets(screen)
+        LevelCur.Space.showPlanets(screen)
         
-        screen.blit(target, targetPosition)
+        screen.blit(target, (LevelCur.targetPosition[0]-30, LevelCur.targetPosition[1]-15))
 
         firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
 
         if fireProjectile:
-            if not Projectile.ReturnPositions(screen, PlanetPosition, targetPosition)[0]:
+            if not LevelCur.Projectile.ReturnPositions(screen, LevelCur.Space.planetPositions, LevelCur.targetPosition)[0]:
                 pass
             else:
                 fireProjectile = False
-                ready, explosion, xProj,yProj, win = Projectile.ReturnPositions(screen, PlanetPosition,targetPosition)
+                ready, explosion, xProj,yProj, win = Level.Projectile.ReturnPositions(screen, LevelCur.Space.planetPositions, LevelCur.targetPosition)
 
         if explosion:
 
