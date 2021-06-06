@@ -229,7 +229,7 @@ def level(lvlnumb):
         firingAngle = playermove(screen, mouseX, mouseY, (40, 350))
 
         if fireProjectile:
-            if not Projectile.ReturnPositions(screen, PlanetPosition, targetPosition):
+            if not Projectile.ReturnPositions(screen, PlanetPosition, targetPosition)[0]:
                 pass
             else:
                 fireProjectile = False

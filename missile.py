@@ -6,7 +6,7 @@ import pygame as pg
 
 class Missile:
 	dt = 0.01
-	maxTime = 100
+	maxTime = 1000
 
 	def __init__ (self, mass, position):
 		self.position = position
@@ -47,7 +47,6 @@ class Missile:
 	def ReturnPositions(self, screen, Planetposition,targetPosition): #insert object position
 		ready = False
 
-
 		if(self.timeStep < len(self.xFinal)):
 			vx = self.xSpeed[self.timeStep]
 			vy = self.ySpeed[self.timeStep]
@@ -77,7 +76,9 @@ class Missile:
 
 			if(self.xFinal[self.timeStep] <= 1280 or (self.xFinal[self.timeStep] >= -200) or (self.yFinal[self.timeStep] <= 720) or (self.yFinal[self.timeStep] >= -200)):
 				screen.blit(missileImage, (self.xFinal[self.timeStep], self.yFinal[self.timeStep]))
+
 		else:
 			ready = True
 		self.timeStep += 3
-		return ready
+
+		return ready, None, None, None, None
