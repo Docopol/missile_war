@@ -16,8 +16,8 @@ pg.mouse.set_cursor(pg.cursors.diamond)
 
 # Sounds
 pg.mixer.init(48000, -16, 1, 10240)
-# thing = backGroundMusic = pygame.mixer.music.load("Sounds/Star-Wars-Main-Theme-_Full_.ogg")
-# pygame.mixer.music.play(-1, 0.0)
+thing = backGroundMusic = pygame.mixer.music.load("Sounds/Star-Wars-Main-Theme-_Full_.ogg")
+pygame.mixer.music.play(-1, 0.0)
 volume = 0.3
 pg.mixer.music.set_volume(volume)
 boomsound = pg.mixer.Sound("Sounds/Explosion Sound Effect.wav")
@@ -51,6 +51,8 @@ Leveltext = pg.image.load("Images/Text/Level.png")
 background = pg.image.load("Images/background.jpg")
 background = pg.transform.scale(background, resolution)
 youWinText = pg.image.load("Images/Text/You Win!.png")
+aliensText = pg.image.load("Images/Text/try to hit the evil aliens!.png")
+spacebarText = pg.image.load("Images/Text/use spacebar to launch the missile.png")
 
 # buttons
 button_1 = pg.Rect(int(0.22 * resolution[0]), int(0.8 * resolution[1]), 200, 50)
@@ -167,7 +169,7 @@ def levelSelect():
 
 
 def level(lvlnumb):
-    global tries, GameStartTime
+    global tries, GameStartTime, levelTime
     GameStartTime = pygame.time.get_ticks() / 1000.
     running = True
 
@@ -175,16 +177,18 @@ def level(lvlnumb):
 
     #LevelCur = Level([(0, 100, 5e5, (500, 200)), (1, 300, 1e6, (700, 500))], (800, 400))
     LevelCur = Level(lvlnumb)
-
+    alpha2, alpha3 = 300,300
     imageNumb = 0
     fireProjectile = False
     explosion = False
     soundOn = True
+    textON = True
     timeWin = []
 
     while running:
 
         gameTime = pygame.time.get_ticks() / 1000.
+        levelTime = gameTime - GameStartTime
         click = False
 
         mouseX, mouseY = pygame.mouse.get_pos()
@@ -217,6 +221,13 @@ def level(lvlnumb):
         screen.blit(backbuttonImage, backbutton)
 
         LevelCur.Space.showPlanets(screen)
+        if lvlnumb == 0 and levelTime > 2 and textON:
+            alpha2 = fadout(screen, aliensText, (150,100),alpha2)
+            if levelTime >6:
+                alpha3 = fadout(screen, spacebarText, (50,100),alpha3)
+                if levelTime>9:
+                    textON = False
+
         
         screen.blit(target, (LevelCur.targetPosition[0]-30, LevelCur.targetPosition[1]-15))
 
@@ -257,6 +268,7 @@ def options_menu(volume):
     buttonLeftImage = pg.image.load("Images/Buttons/button_right.png")
     buttonLeftImage = pg.transform.scale(buttonLeftImage, (100, 50))
     buttonRightImage = pg.transform.flip(buttonLeftImage, True, False)
+
 
     running = True
     while running:
@@ -313,7 +325,7 @@ def options_menu(volume):
 
 def winnerScreen(levelNumber):
     running = True
-    levelTime = round(pygame.time.get_ticks() / 1000. - GameStartTime)
+    #levelTime = round(pygame.time.get_ticks() / 1000. - GameStartTime)
     totalScore = round((1/levelTime +5/tries) *1000)
     while running:
         click = False
@@ -362,8 +374,8 @@ def winnerScreen(levelNumber):
 
 
         screen.blit(text_func((f'Number of tries: {tries} times'), 60, (116, 252, 114)), (390, 200))
-        screen.blit(text_func((f'completion time: {levelTime} seconds'), 60, (116, 252, 114)), (390, 300))
-        screen.blit(text_func((f'total score: {totalScore} points'), 60, (116, 252, 114)), (390, 400))
+        screen.blit(text_func((f'Completion time: {round(levelTime)} seconds'), 60, (116, 252, 114)), (390, 300))
+        screen.blit(text_func((f'Score: {totalScore} points'), 60, (116, 252, 114)), (390, 400))
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen

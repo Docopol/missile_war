@@ -40,12 +40,16 @@ def playermove(screen, mouseX, mouseY, scCoords):
     return -angle
 
 def fade(screen, image, position,alpha):
-
         image.set_alpha(alpha)
         screen.blit(image,(position))
         alpha = float(alpha) + 0.7
         return alpha
 
+def fadout(screen,image,position,alpha2):
+    image.set_alpha(alpha2)
+    screen.blit(image, (position))
+    alpha2 = float(alpha2) - 1
+    return alpha2
 
 def ExplosionFunc(screen, imageNumb, xProj,yProj,explosion):
     dt = 0.001
