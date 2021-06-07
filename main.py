@@ -158,7 +158,7 @@ def levelSelect():
             if buttonLevel[i].collidepoint((mouseX, mouseY)):
                 if click:
                     pg.mixer.Sound.play(clickSound)
-                    running = False
+                    #running = False
                     level(i)
 
 
@@ -336,9 +336,10 @@ def winnerScreen(levelNumber):
 
         if button_1.collidepoint((mouseX, mouseY)):
             if click:
-                pg.mixer.Sound.play(clickSound)
-                level(levelNumber+1)
-                running = False
+                if levelNumber < 7:
+                    pg.mixer.Sound.play(clickSound)
+                    level(levelNumber+1)
+                    running = False
         if button_2.collidepoint((mouseX, mouseY)):
             if click:
                 pg.mixer.Sound.play(clickSound)
@@ -353,7 +354,8 @@ def winnerScreen(levelNumber):
         screen.blit(mainMenuBackground, (0, 0))
         screen.blit(youWinText, (340, 20))
 
-        screen.blit(nextLevelButton, button_1)
+        if levelNumber < 7:
+            screen.blit(nextLevelButton, button_1)
         screen.blit(retryLevelButton, button_2)
         screen.blit(mainMenuButton, button_3)
 

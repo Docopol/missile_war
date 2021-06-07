@@ -16,11 +16,11 @@ def fps_count(gameTime):
     return fps
 
 def housekeepingdata(gameTime,resolution,screen):
-    screen.blit(text_func("runtime:"+str(gameTime), 25, (0, 255, 0)),
-                (0.87 * resolution[0], 0.92 * resolution[1]))  # displaying runtime
+    screen.blit(text_func("runtime:"+str(round(gameTime)), 25, (0, 255, 0)),
+                (0.92 * resolution[0], 0.95 * resolution[1]))  # displaying runtime
 
     screen.blit(text_func("fps:" + str(fps_count(gameTime)), 25, (0, 255, 0)),  # displaying fps
-                (0.9 * resolution[0], 0.95 * resolution[1]))
+                (0.93 * resolution[0], 0.97 * resolution[1]))
 
 
 def playermove(screen, mouseX, mouseY, scCoords):
