@@ -13,6 +13,7 @@ class Level:
 
 	def __init__ (self, levelNumber):
 		
+		self.Space.destructor()
 		planets, target = self.LevelSelector(levelNumber)
 
 		for planet in planets:
@@ -20,6 +21,7 @@ class Level:
 
 		self.Space.calcTotalGravityField()
 		self.targetPosition = target
+
 
 	def LevelSelector(self, levelNumber):
 		planets = dict([('Icy-Despair', (0, 100, 5e5)), ('Saturn-Rewinded', (1, 300, 1e6)), ('Moon', (2, 100, 2e5)), ('Radioactive-sun', (3, 200, 3e6)), ('Jupiler', (4, 100, 1e6))])
