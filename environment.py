@@ -56,3 +56,9 @@ class Environment:
 
         plt.savefig('test.png')
 
+    def destructor(self):
+        self.planets = []
+        self.planetPositions = []
+        self.imageNumb = 0
+
+        self.Gx, self.Gy = np.zeros((2180, 1720)).T, np.zeros((2180, 1720)).T
