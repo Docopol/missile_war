@@ -8,9 +8,7 @@ class Level:
 	scCoords = (40, 350)
 	projectileCoords = (scCoords[0] + 30, scCoords[1] + 10)
 	Space = Environment()
-	Projectile = Missile(1, projectileCoords)
-
-
+	Projectile = Missile(projectileCoords)
 
 	def __init__ (self, levelNumber):
 		
@@ -24,7 +22,7 @@ class Level:
 		self.targetPosition = target
 
 
-	def LevelSelector(self, levelNumber):
+	def LevelSelector(self, levelNumber): 
 		planets = dict([('Icy-Despair', (0, 100, 5e5)), ('Saturn-Rewinded', (1, 300, 1e6)), ('Moon', (2, 100, 2e5)), ('Radioactive-sun', (3, 200, 3e6)), ('Jupiler', (4, 100, 1e6)), ('Earthish', (5, 100, 1e6)), ('Lavalamp', (6, 100, 1e6)), ('Smurfplanet', (7, 100, 1e6)), ('Doomhole', (8, 200, 1e8)), ('Greener', (9, 100, 1e6))])
 		levels = dict([(0 , (((*planets['Moon'], (450, 350)), ), (850, 350))), 
 			(1 , (((*planets['Moon'], (750, 500)), (*planets['Radioactive-sun'], (700, 250))), (800, 420))),

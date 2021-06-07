@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 
 
 class Environment:
-    gravitationParameter = 1
 
     def __init__(self):
         
@@ -22,7 +21,7 @@ class Environment:
         self.planets.append((planetNumb, imageSize, mass, position))
         self.planetPositions.append(position)
 
-    def showPlanets(self, screen):
+    def showPlanets(self, screen): #Planet animation    
         dt = 0.001
         self.imageNumb += dt * 100
         numberOfImages = 399
@@ -46,7 +45,7 @@ class Environment:
         dist = np.hypot(x-r0[0], (y-r0[1]))**3
         return mass * (x - r0[0]) / dist, mass * (y - r0[1]) / dist
 
-    def displayGravityField(self):
+    def displayGravityField(self): #Function only used for testing purposes
         fig = plt.figure()
         ax = fig.add_subplot(111)
 
@@ -56,7 +55,7 @@ class Environment:
 
         plt.savefig('test.png')
 
-    def destructor(self):
+    def destructor(self): #Reinitilase the vector field for each level
         self.planets = []
         self.planetPositions = []
         self.imageNumb = 0
