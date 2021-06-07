@@ -14,7 +14,6 @@ class Environment:
         self.X, self.Y = np.meshgrid(self.x, self.y)
 
         self.Gx, self.Gy = np.zeros((2180, 1720)).T, np.zeros((2180, 1720)).T
-        
         self.planets = []
         self.planetPositions = []
         self.imageNumb = 0

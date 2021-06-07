@@ -1,6 +1,5 @@
 import pygame
 import pygame as pg
-import sys
 import math
 
 

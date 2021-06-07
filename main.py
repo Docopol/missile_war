@@ -47,7 +47,6 @@ backbuttonImage = pg.transform.scale(backbuttonImage, (50, 50))
 spaceshipImage = pg.image.load("Images/spaceship.png")
 pg.display.set_icon(spaceshipImage)
 spaceshipImage = pg.transform.scale(spaceshipImage, (96, 54))
-lvl1screenshot = pg.image.load("Images/lvlscrshots/scrsht.png")
 Leveltext = pg.image.load("Images/Text/Level.png")
 background = pg.image.load("Images/background.jpg")
 background = pg.transform.scale(background, resolution)
@@ -107,19 +106,18 @@ def main_menu():
 
 
 def levelSelect():
-    # button stuff - sorry for being a lazy bitch in this part
+    # button stuff
     buttonLevel = np.empty(8, dtype=pg.Rect)
     ImageLevel = np.empty(8, dtype=pg.Rect)
-    for j in range(0, 8):
+    for j in range(0, 5):
         buttonLevel[j] = pg.Rect(int((0.08 + 0.22 * j) * resolution[0]), int(0.34 * resolution[1]), 200, 200)
-        ImageLevel[j] = pg.image.load("Images/lvlscrshots/scrsht.png")
-        # ImageLevel[j].set_colorkey((255,255,255))
-        ImageLevel[j] = pg.transform.scale(ImageLevel[j], (200, 200))
+        filename = "Images/Buttons/button ("+str(j)+").png"
+        ImageLevel[j] = pg.image.load(filename)
+
     for j in range(4, 8):
         buttonLevel[j] = pg.Rect(int((-0.8 + 0.22 * j) * resolution[0]), int(0.7 * resolution[1]), 200, 200)
-        ImageLevel[j] = pg.image.load("Images/lvlscrshots/scrshot" + str(j) + ".png")
-        ImageLevel[j].set_colorkey((255, 255, 255))
-        ImageLevel[j] = pg.transform.scale(ImageLevel[j], (200, 200))
+        filename = "Images/Buttons/button ("+str(j)+").png"
+        ImageLevel[j] = pg.image.load(filename)
 
     running = True
     levelStart = False
@@ -154,7 +152,7 @@ def levelSelect():
 
         for k in range(8):
             screen.blit(ImageLevel[k], buttonLevel[k])
-            screen.blit(text_func(k, 42, (0, 0, 255)), ((buttonLevel[k][0]) + 90, (buttonLevel[k][1]) + 170))
+
 
         for i in range(8):
             if buttonLevel[i].collidepoint((mouseX, mouseY)):
@@ -162,7 +160,7 @@ def levelSelect():
                     pg.mixer.Sound.play(clickSound)
                     running = False
                     level(i)
-                    #winnerScreen(i)
+
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen'''
@@ -244,8 +242,10 @@ def level(lvlnumb):
                     winnerScreen(lvlnumb)
                     running = False
 
+
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
+
 
     return tries
 
@@ -314,7 +314,7 @@ def options_menu(volume):
 def winnerScreen(levelNumber):
     running = True
     levelTime = round(pygame.time.get_ticks() / 1000. - GameStartTime)
-    totalScore = round((1/levelTime +1/tries) *1000)
+    totalScore = round((1/levelTime +5/tries) *1000)
     while running:
         click = False
         gameTime = pygame.time.get_ticks() / 1000.
