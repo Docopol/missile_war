@@ -64,7 +64,7 @@ Click = False
 
 
 
-def main_menu():
+def main_menu(volume):
     alpha = 0
     while True:
         gameTime = pygame.time.get_ticks() / 1000.
@@ -94,7 +94,7 @@ def main_menu():
         if button_2.collidepoint((mouseX, mouseY)):
             if click:
                 pg.mixer.Sound.play(clickSound)
-                options_menu(volume)
+                volume = options_menu(volume)
         if button_3.collidepoint((mouseX, mouseY)):
             if click:
                 pg.mixer.Sound.play(clickSound)
@@ -321,6 +321,7 @@ def options_menu(volume):
 
         housekeepingdata(gameTime, resolution, screen)  # displays runtime and fps
         pg.display.flip()  # displaying on the screen
+    return volume
 
 
 def winnerScreen(levelNumber):
@@ -360,7 +361,7 @@ def winnerScreen(levelNumber):
         if button_3.collidepoint((mouseX, mouseY)):
             if click:
                 pg.mixer.Sound.play(clickSound)
-                main_menu()
+                main_menu(volume)
                 running = False
 
         screen.blit(mainMenuBackground, (0, 0))
@@ -381,5 +382,5 @@ def winnerScreen(levelNumber):
         pg.display.flip()  # displaying on the screen
 
 
-main_menu()
+main_menu(volume)
 
